@@ -3,22 +3,16 @@ ado_pool_name = "vmss-bootstrap-pool"
 build_definitions = {
 
   "pipeline1" = {
-    name     = "001-admin-password-terraform",
-    path     = "\\001-admin-password",
+    name     = "azure-ai-demo-pipeline",
+    path     = "\\azure-ai-demo",
     repo_ref = "repo2",
-    yml_path = "azure-ai-demo/001-admin-password-terraform.yml"
-  }
-  "pipeline2" = {
-    name     = "001-admin-password-test",
-    path     = "\\001-admin-password",
-    repo_ref = "repo2",
-    yml_path = "azure-ai-demo/001-admin-password-test.yml"
+    yml_path = "azure-ai-demo/terraform.yml"
   }
 }
 
 git_repos = {
   "repo1" = {
-    name           = "module",
+    name           = "ai-demo",
     default_branch = "refs/heads/init",
     initialization = {
       init_type   = "Import",
@@ -28,7 +22,7 @@ git_repos = {
   }
   "repo2" = {
     name           = "pipelines",
-    default_branch = "refs/heads/main",
+    default_branch = "refs/heads/init",
     initialization = {
       init_type   = "Import",
       source_type = "Git",
