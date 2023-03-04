@@ -12,3 +12,12 @@ resource "azurerm_resource_group" "ai-demo" {
   location = var.location
   tags     = var.tags
 }
+
+data "azurerm_virtual_machine_scale_set" "bootstrap" {
+  name                = "rg-azure-ai-demo-bootstrap"
+  resource_group_name = "vmss-azure-ai-demo-bootstrap"
+}
+
+output "vmss" {
+  value = data.azurerm_virtual_machine_scale_set.bootstrap
+}
