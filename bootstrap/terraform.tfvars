@@ -33,7 +33,7 @@ git_repos = {
 
 location                     = "uksouth"
 nsg_name                     = "nsg-azure-ai-demo"
-resource_group_name          = "rg-azure-ai-demo"
+resource_group_name          = "rg-azure-ai-demo-bootstrap"
 vmss_name                    = "azure-ai-demo-bootstrap"
 vmss_admin_password          = "Sup3rS3cr3tP@55w0rd!"
 vmss_vnet_name               = "vnet-azure-ai-demo"
