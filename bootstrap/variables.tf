@@ -113,12 +113,12 @@ variable "vmss_admin_password" {
   description = "Password to allocate to the admin user account"
 }
 
-variable "vmss_subnet_name" {
-  type        = string
+variable "subnet_names" {
+  type        = list(string)
   description = "Name of subnet where the vmss will be connected"
 }
 
-variable "vmss_subnet_address_prefixes" {
+variable "subnet_prefixes" {
   type        = list(string)
   description = "Subnet address prefixes"
 }
@@ -128,7 +128,7 @@ variable "vmss_vnet_name" {
   description = "Name of the Vnet that the target subnet is a member of"
 }
 
-variable "vmss_vnet_address_space" {
+variable "vnet_address_space" {
   type        = list(string)
   description = "Vnet network address spaces"
 }

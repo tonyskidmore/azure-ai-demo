@@ -28,7 +28,9 @@ module "terraform-azurerm-vmss-devops-agent" {
   vmss_admin_password      = var.vmss_admin_password
   vmss_name                = var.vmss_name
   vmss_resource_group_name = azurerm_resource_group.azure-ai-demo.name
-  vmss_subnet_id           = azurerm_subnet.azure-ai-demo.id
-  vmss_custom_data_data    = local.vmss_custom_data_data
-  vmss_identity_type       = "SystemAssigned"
+  # TODO: update to refrence by variable name
+  # vmss_subnet_id           = azurerm_subnet.azure-ai-demo.id
+  vmss_subnet_id        = module.network.vnet_subnets[index(var.subnet_names, "snet-azure-ai-demo-ado-agents")]
+  vmss_custom_data_data = local.vmss_custom_data_data
+  vmss_identity_type    = "SystemAssigned"
 }
