@@ -14,8 +14,8 @@ resource "azurerm_resource_group" "ai-demo" {
 }
 
 data "azurerm_virtual_machine_scale_set" "bootstrap" {
-  name                = "rg-azure-ai-demo-bootstrap"
-  resource_group_name = "vmss-azure-ai-demo-bootstrap"
+  name                = "vmss-azure-ai-demo-bootstrap"
+  resource_group_name = "rg-azure-ai-demo-bootstrap"
 }
 
 output "vmss" {
