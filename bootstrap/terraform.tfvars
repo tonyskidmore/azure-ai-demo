@@ -12,7 +12,7 @@ build_definitions = {
 
 git_repos = {
   "repo1" = {
-    name           = "ai-demo",
+    name           = "ai-demo-src",
     default_branch = "refs/heads/init",
     initialization = {
       init_type   = "Import",
