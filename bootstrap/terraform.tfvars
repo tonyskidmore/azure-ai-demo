@@ -6,13 +6,13 @@ build_definitions = {
     name     = "001-admin-password-terraform",
     path     = "\\001-admin-password",
     repo_ref = "repo2",
-    yml_path = "demo-vmss/001-admin-password-terraform.yml"
+    yml_path = "azure-ai-demo/001-admin-password-terraform.yml"
   }
   "pipeline2" = {
     name     = "001-admin-password-test",
     path     = "\\001-admin-password",
     repo_ref = "repo2",
-    yml_path = "demo-vmss/001-admin-password-test.yml"
+    yml_path = "azure-ai-demo/001-admin-password-test.yml"
   }
 }
 

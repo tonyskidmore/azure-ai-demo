@@ -1,5 +1,5 @@
 output "storage_account_name" {
-  value       = azurerm_storage_account.demo-vmss.name
+  value       = azurerm_storage_account.azure-ai-demo.name
   description = "Azure storage account name"
 }
 
@@ -14,7 +14,7 @@ output "key" {
 }
 
 output "resource_group_name" {
-  value       = azurerm_resource_group.demo-vmss.name
+  value       = azurerm_resource_group.azure-ai-demo.name
   description = "Azure storage resource group name"
 }
 

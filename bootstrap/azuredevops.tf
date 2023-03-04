@@ -180,12 +180,12 @@ resource "azuredevops_variable_group" "vars" {
 
   variable {
     name  = "state_resource_group_name"
-    value = azurerm_resource_group.demo-vmss.name
+    value = azurerm_resource_group.azure-ai-demo.name
   }
 
   variable {
     name  = "state_storage_account_name"
-    value = azurerm_storage_account.demo-vmss.name
+    value = azurerm_storage_account.azure-ai-demo.name
   }
 
   variable {

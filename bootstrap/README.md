@@ -1,7 +1,7 @@
 # Azure DevOps Demo Environment
 
 This creates an Azure DevOps project that can be used to run Pipelines to create other examples.
-By default the project will be called `demo-vmss`.  It will create the following items in the project:
+By default the project will be called `azure-ai-demo`.  It will create the following items in the project:
 
 | Item                       | Description                                                                                          |
 |----------------------------|------------------------------------------------------------------------------------------------------|
@@ -82,7 +82,7 @@ If it does just re-run the `plan` and `apply` steps and it should go through OK.
 
 
 
-Open Azure DevOps and explore the `demo-vmss` project.  Review the [examples README](../examples/README.md) to see what examples are available.
+Open Azure DevOps and explore the `azure-ai-demo` project.  Review the [examples README](../examples/README.md) to see what examples are available.
 
 To destroy the demo environment, first run the destroy pipeline for each of any examples you have deployed and then run:
 
@@ -95,7 +95,7 @@ terraform apply tfplan
 
 If you find yourself in a position that things have not destroyed correctly you can take manual steps to tidy up:
 
-* In Azure DevOps delete the `demo-vmss` project
+* In Azure DevOps delete the `azure-ai-demo` project
 * In Azure DevOps at the Organization level remove teh `vmss-bootstrap-pool` and any `vmss-agent-pool-*` agent pools that were created by the demo environment
 * In Azure delete the `rg-demo-azure-devops-vmss` resource group
 * Locally from the `demo_environment` directory remove `terraform.tfstate*`

@@ -1,4 +1,4 @@
-resource "azurerm_resource_group" "demo-vmss" {
+resource "azurerm_resource_group" "azure-ai-demo" {
   name     = var.resource_group_name
   location = var.location
   tags     = var.tags
@@ -6,7 +6,7 @@ resource "azurerm_resource_group" "demo-vmss" {
 
 # resource "azurerm_management_lock" "resource-group-level" {
 #   name       = "resource-group-level"
-#   scope      = azurerm_resource_group.demo-vmss.id
+#   scope      = azurerm_resource_group.azure-ai-demo.id
 #   lock_level = "CanNotDelete"
 #   notes      = "This would normally be set if not a demo"
 # }
@@ -27,8 +27,8 @@ module "terraform-azurerm-vmss-devops-agent" {
   ado_service_connection   = azuredevops_serviceendpoint_azurerm.sub.service_endpoint_name
   vmss_admin_password      = var.vmss_admin_password
   vmss_name                = var.vmss_name
-  vmss_resource_group_name = azurerm_resource_group.demo-vmss.name
-  vmss_subnet_id           = azurerm_subnet.demo-vmss.id
+  vmss_resource_group_name = azurerm_resource_group.azure-ai-demo.name
+  vmss_subnet_id           = azurerm_subnet.azure-ai-demo.id
   vmss_custom_data_data    = local.vmss_custom_data_data
   vmss_identity_type       = "SystemAssigned"
 }

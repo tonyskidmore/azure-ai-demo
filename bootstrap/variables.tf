@@ -11,7 +11,7 @@ variable "ado_ext_pat" {
 variable "ado_project_name" {
   type        = string
   description = "Azure DevOps project name"
-  default     = "demo-vmss"
+  default     = "azure-ai-demo"
 }
 
 variable "ado_project_visibility" {
@@ -44,7 +44,7 @@ variable "resource_group_name" {
 variable "service_endpoint_name" {
   type        = string
   description = "AzureRM service connection name"
-  default     = "demo-vmss"
+  default     = "azure-ai-demo"
 }
 
 variable "serviceprincipalid" {

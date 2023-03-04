@@ -2,10 +2,10 @@ data "http" "ifconfig" {
   url = "https://ifconfig.me/ip"
 }
 
-resource "azurerm_storage_account" "demo-vmss" {
+resource "azurerm_storage_account" "azure-ai-demo" {
   name                          = "sademovmss${random_string.build_index.result}"
-  resource_group_name           = azurerm_resource_group.demo-vmss.name
-  location                      = azurerm_resource_group.demo-vmss.location
+  resource_group_name           = azurerm_resource_group.azure-ai-demo.name
+  location                      = azurerm_resource_group.azure-ai-demo.location
   account_tier                  = "Standard"
   account_replication_type      = "LRS"
   public_network_access_enabled = true
@@ -13,7 +13,7 @@ resource "azurerm_storage_account" "demo-vmss" {
   network_rules {
     default_action             = "Deny"
     ip_rules                   = [data.http.ifconfig.body]
-    virtual_network_subnet_ids = [azurerm_subnet.demo-vmss.id]
+    virtual_network_subnet_ids = [azurerm_subnet.azure-ai-demo.id]
   }
 
   tags = var.tags
@@ -21,6 +21,6 @@ resource "azurerm_storage_account" "demo-vmss" {
 
 resource "azurerm_storage_container" "tfstate" {
   name                  = "tfstate"
-  storage_account_name  = azurerm_storage_account.demo-vmss.name
+  storage_account_name  = azurerm_storage_account.azure-ai-demo.name
   container_access_type = "private"
 }
