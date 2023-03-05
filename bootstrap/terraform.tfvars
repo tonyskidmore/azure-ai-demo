@@ -4,10 +4,16 @@ ado_pool_desired_idle = 1
 build_definitions = {
 
   "pipeline1" = {
-    name     = "azure-ai-demo-pipeline",
+    name     = "terraform",
     path     = "\\azure-ai-demo",
     repo_ref = "repo2",
     yml_path = "azure-ai-demo/terraform.yml"
+  }
+  "pipeline2" = {
+    name     = "application",
+    path     = "\\azure-ai-demo",
+    repo_ref = "repo2",
+    yml_path = "azure-ai-demo/application.yml"
   }
 }
 

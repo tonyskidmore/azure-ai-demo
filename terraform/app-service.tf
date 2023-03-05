@@ -50,14 +50,13 @@ resource "azurerm_linux_web_app" "application" {
   }
 
   app_settings = {
-    "WEBSITES_ENABLE_APP_SERVICE_STORAGE" = "false"
-    "DOCKER_REGISTRY_SERVER_URL"          = "https://${var.acr_name}.azurecr.io"
+    WEBSITES_ENABLE_APP_SERVICE_STORAGE = "false"
+    DOCKER_REGISTRY_SERVER_URL          = "https://${var.acr_name}.azurecr.io"
+    WEBSITES_PORT                       = "8501"
+    # https://github.com/hashicorp/terraform-provider-azurerm/issues/19096
+    WEBSITE_PULL_IMAGE_OVER_VNET        = true
     # "DOCKER_REGISTRY_SERVER_USERNAME"     = azurerm_container_registry.acr.admin_username
     # "DOCKER_REGISTRY_SERVER_PASSWORD"     = azurerm_container_registry.acr.admin_password
-    "WEBSITES_PORT" = "8501"
-    WEBSITE_PULL_IMAGE_OVER_VNET             = true
-
-    # These are app specific environment variables
   }
 }
 
