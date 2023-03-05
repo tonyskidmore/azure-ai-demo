@@ -7,17 +7,28 @@ resource "random_string" "build_index" {
   min_numeric = 6
 }
 
-resource "azurerm_resource_group" "ai-demo" {
-  name     = var.resource_group_name
-  location = var.location
-  tags     = var.tags
+data "azurerm_resource_group" "ai-demo" {
+  name = var.resource_group_name
 }
 
 data "azurerm_virtual_machine_scale_set" "bootstrap" {
-  name                = "vmss-azure-ai-demo-bootstrap"
-  resource_group_name = "rg-azure-ai-demo-bootstrap"
+  name                = var.vmss_name
+  resource_group_name = var.bootstrap_resource_group_name
 }
 
-output "vmss" {
-  value = data.azurerm_virtual_machine_scale_set.bootstrap
+data "azurerm_virtual_network" "bootstrap" {
+  name                = var.vmss_vnet_name
+  resource_group_name = var.bootstrap_resource_group_name
+}
+
+data "azurerm_subnet" "private_endpoints" {
+  name                 = var.subnet_name_private_endpoint
+  virtual_network_name = data.azurerm_virtual_network.bootstrap.name
+  resource_group_name  = var.bootstrap_resource_group_name
+}
+
+data "azurerm_subnet" "vnet_integration" {
+  name                 = var.subnet_name_vnet_integration
+  virtual_network_name = data.azurerm_virtual_network.bootstrap.name
+  resource_group_name  = var.bootstrap_resource_group_name
 }

@@ -17,6 +17,10 @@ terraform {
       source  = "hashicorp/azurerm"
       version = ">=3.1.0"
     }
+    azuread = {
+      source  = "hashicorp/azuread"
+      version = "~> 2.36.0"
+    }
     null = {
       version = ">= 3.2.1"
     }
@@ -26,4 +30,10 @@ terraform {
 
 provider "azurerm" {
   features {}
+}
+
+provider "shell" {
+  sensitive_environment = {
+    AZURE_DEVOPS_EXT_PAT = var.ado_ext_pat
+  }
 }

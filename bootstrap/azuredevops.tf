@@ -194,3 +194,19 @@ resource "azuredevops_variable_group" "vars" {
   }
 
 }
+
+module "terraform-azurerm-vmss-devops-agent" {
+  source                   = "tonyskidmore/vmss-devops-agent/azurerm"
+  version                  = "0.2.1"
+  ado_org                  = var.ado_org
+  ado_pool_name            = var.ado_pool_name
+  ado_project              = azuredevops_project.project.name
+  ado_project_only         = "True"
+  ado_service_connection   = azuredevops_serviceendpoint_azurerm.sub.service_endpoint_name
+  vmss_admin_password      = var.vmss_admin_password
+  vmss_name                = var.vmss_name
+  vmss_resource_group_name = azurerm_resource_group.azure-ai-demo.name
+  vmss_subnet_id           = module.network.vnet_subnets[index(var.subnet_names, var.vmss_subnet)]
+  vmss_custom_data_data    = local.vmss_custom_data_data
+  vmss_identity_type       = "SystemAssigned"
+}

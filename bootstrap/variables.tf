@@ -41,6 +41,11 @@ variable "resource_group_name" {
   description = "Resource group name of where all resources will be created"
 }
 
+variable "demo_resource_group_name" {
+  type        = string
+  description = "Resource group name of where all resources will be created"
+}
+
 variable "service_endpoint_name" {
   type        = string
   description = "AzureRM service connection name"
@@ -115,6 +120,11 @@ variable "vmss_admin_password" {
 
 variable "subnet_names" {
   type        = list(string)
+  description = "Subnet names"
+}
+
+variable "vmss_subnet" {
+  type        = string
   description = "Name of subnet where the vmss will be connected"
 }
 

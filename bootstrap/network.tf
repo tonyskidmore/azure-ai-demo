@@ -35,6 +35,7 @@
 module "network" {
   source                  = "Azure/network/azurerm"
   version                 = "5.2.0"
+  vnet_name               = var.vmss_vnet_name
   resource_group_name     = azurerm_resource_group.azure-ai-demo.name
   resource_group_location = azurerm_resource_group.azure-ai-demo.location
   address_spaces          = var.vnet_address_space
@@ -45,19 +46,19 @@ module "network" {
   subnet_enforce_private_link_endpoint_network_policies = {
     "snet-azure-ai-demo-private-endpoint" : true
   }
-  # subnet_delegation = {
-  #   subnet1 = [
-  #     {
-  #       name = "delegation"
-  #       service_delegation = {
-  #         name = "Microsoft.ContainerInstance/containerGroups"
-  #         actions = [
-  #           "Microsoft.Network/virtualNetworks/subnets/action",
-  #         ]
-  #       }
-  #     }
-  #   ]
-  # }
+  subnet_delegation = {
+    snet-azure-ai-demo-vnet-int = [
+      {
+        name = "delegation"
+        service_delegation = {
+          name = "Microsoft.Web/serverFarms"
+          actions = [
+            "Microsoft.Network/virtualNetworks/subnets/action",
+          ]
+        }
+      }
+    ]
+  }
 
   # TODO: update to make dynamic
   # subnet_service_endpoints = {
