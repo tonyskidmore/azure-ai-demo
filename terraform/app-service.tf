@@ -38,14 +38,14 @@ resource "azurerm_linux_web_app" "application" {
 
   logs {
     application_logs {
-        file_system_level = "Error"
+      file_system_level = "Error"
     }
 
     http_logs {
-        file_system {
-            retention_in_days = 10
-            retention_in_mb   = 35
-        }
+      file_system {
+        retention_in_days = 10
+        retention_in_mb   = 35
+      }
     }
   }
 
