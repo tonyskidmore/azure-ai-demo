@@ -55,7 +55,7 @@ resource "azurerm_linux_web_app" "application" {
     # "DOCKER_REGISTRY_SERVER_USERNAME"     = azurerm_container_registry.acr.admin_username
     # "DOCKER_REGISTRY_SERVER_PASSWORD"     = azurerm_container_registry.acr.admin_password
     "WEBSITES_PORT" = "8501"
-    # WEBSITE_PULL_IMAGE_OVER_VNET             = true
+    WEBSITE_PULL_IMAGE_OVER_VNET             = true
 
     # These are app specific environment variables
   }
