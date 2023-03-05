@@ -25,6 +25,12 @@ variable "ado_project_visibility" {
   }
 }
 
+variable "ado_pool_desired_idle" {
+  type        = number
+  description = "Number of machines to have ready waiting for jobs"
+  default     = 0
+}
+
 variable "ado_pool_name" {
   type        = string
   description = "Azure DevOps agent pool name"

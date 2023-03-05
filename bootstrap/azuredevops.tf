@@ -203,6 +203,7 @@ module "terraform-azurerm-vmss-devops-agent" {
   ado_project              = azuredevops_project.project.name
   ado_project_only         = "True"
   ado_service_connection   = azuredevops_serviceendpoint_azurerm.sub.service_endpoint_name
+  ado_pool_desired_idle    = var.ado_pool_desired_idle
   vmss_admin_password      = var.vmss_admin_password
   vmss_name                = var.vmss_name
   vmss_resource_group_name = azurerm_resource_group.azure-ai-demo.name
