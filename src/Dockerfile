@@ -8,9 +8,11 @@ RUN apt-get update && apt-get install -y \
     software-properties-common \
     && rm -rf /var/lib/apt/lists/*
 
-COPY app.py /app
-COPY requirements.txt /app
-RUN pip3 install -r requirements.txt
+COPY app /app
+
+RUN pip3 install pip --upgrade && \
+    pip3 install setuptools --upgrade && \
+    pip3 install -r requirements.txt
 
 EXPOSE 8501
 
