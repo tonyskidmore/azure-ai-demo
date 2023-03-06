@@ -13,7 +13,6 @@ resource "azuredevops_git_repository" "repository" {
   for_each       = var.git_repos
   project_id     = azuredevops_project.project.id
   name           = each.value.name
-  # TODO: switch to main
   default_branch = "refs/heads/main"
   initialization {
     init_type   = each.value.initialization.init_type
@@ -36,7 +35,6 @@ resource "azuredevops_build_definition" "build_definition" {
   repository {
     repo_type   = "TfsGit"
     repo_id     = azuredevops_git_repository.repository[each.value.repo_ref].id
-    # TODO: switch to main
     branch_name = "refs/heads/main"
     yml_path    = each.value.yml_path
   }
@@ -151,6 +149,11 @@ resource "azuredevops_variable_group" "vars" {
   variable {
     name  = "ado_org"
     value = var.ado_org
+  }
+
+  variable {
+    name  = "resource_group"
+    value = var.demo_resource_group_name
   }
 
   variable {

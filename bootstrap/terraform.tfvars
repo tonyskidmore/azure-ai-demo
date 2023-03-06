@@ -20,7 +20,7 @@ build_definitions = {
 git_repos = {
   "repo1" = {
     name           = "ai-demo-src",
-    default_branch = "refs/heads/init",
+    default_branch = "refs/heads/main",
     initialization = {
       init_type   = "Import",
       source_type = "Git",
@@ -29,7 +29,7 @@ git_repos = {
   }
   "repo2" = {
     name           = "pipelines",
-    default_branch = "refs/heads/init",
+    default_branch = "refs/heads/main",
     initialization = {
       init_type   = "Import",
       source_type = "Git",

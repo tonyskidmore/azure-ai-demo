@@ -9,16 +9,31 @@ resource "azurerm_key_vault" "application" {
   tags                          = var.tags
 }
 
-resource "azurerm_key_vault_access_policy" "client" {
+resource "azurerm_key_vault_access_policy" "app" {
   key_vault_id = azurerm_key_vault.application.id
   tenant_id    = data.azurerm_client_config.current.tenant_id
   object_id    = azurerm_linux_web_app.application.identity[0].principal_id
 
   secret_permissions = [
-    "Set",
+    "Get",
+    "List"
+  ]
+}
+
+resource "azurerm_key_vault_access_policy" "app" {
+  key_vault_id = azurerm_key_vault.application.id
+  tenant_id    = data.azurerm_client_config.current.tenant_id
+  object_id    = data.azurerm_client_config.current.object_id
+
+  secret_permissions = [
     "Get",
     "List",
-    "Delete"
+    "Delete",
+    "Purge",
+    "Set",
+    "Backup",
+    "Recover",
+    "Restore"
   ]
 }
 

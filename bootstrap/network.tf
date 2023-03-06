@@ -26,11 +26,6 @@ module "network" {
     ]
   }
 
-  # TODO: update to make dynamic
-  # subnet_service_endpoints = {
-  #   "subnet1" : ["Microsoft.Sql"]
-  # }
-
   tags         = var.tags
   use_for_each = true
 }
