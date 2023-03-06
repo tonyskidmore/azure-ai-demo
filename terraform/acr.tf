@@ -4,7 +4,8 @@ resource "azurerm_container_registry" "acr" {
   location                      = var.location
   sku                           = "Premium"
   admin_enabled                 = var.acr_admin_enabled
-  public_network_access_enabled = false
+  # enabling for demo puproses
+  public_network_access_enabled = true
 
   identity {
     type         = var.acr_identity_type
