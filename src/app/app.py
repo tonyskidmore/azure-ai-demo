@@ -7,6 +7,7 @@ import numpy as np
 import openai
 import os
 import pandas as pd
+import requests
 import streamlit as st
 from collections import namedtuple
 from os import environ
@@ -35,6 +36,74 @@ def ask_gpt(content, role="user"):
           st.markdown(choice.message.content)
     else:
         st.markdown("You need to set the OPENAI_API_KEY environment variable to a valid OpenAI API key :no_entry_sign:")
+
+
+def translate_text(text, language):
+    try:
+        # Get Configuration Settings
+        key = os.getenv('COG_SERVICE_KEY')
+        region = os.getenv('COG_SERVICE_REGION')
+        endpoint = os.getenv('COG_SERVICE_ENDPOINT')
+
+        st.markdown('Detected language of "' + text + '":', detect_language(text, key, region, endpoint))
+        st.markdown(language + ":", translate(text, 'en', language, key, region, endpoint))
+
+        st.markdown('Detected language of "' + text + '":', detect_language(text, key, region, endpoint))
+        st.markdown(language + ":", translate(text, 'en', language, key, region, endpoint))
+    except Exception as ex:
+        st.exception(ex)
+
+
+def detect_language(text, key, region, endpoint):
+    # Use the Translator detect function
+    path = '/detect'
+    url = endpoint + path
+    # Build the request
+    params = {
+        'api-version': '3.0'
+    }
+    headers = {
+        'Ocp-Apim-Subscription-Key': key,
+        'Ocp-Apim-Subscription-Region': region,
+        'Content-type': 'application/json'
+    }
+    body = [{
+        'text': text
+    }]
+    # Send the request and get response
+    st.markdown(f"url: {url}")
+    request = requests.post(url, params=params, headers=headers, json=body, verify=False)
+    response = request.json()
+    # Get language
+    language = response[0]["language"]
+    # Return the language
+    return language
+
+
+def translate(text, source_language, target_language, key, region, endpoint):
+    # Use the Translator translate function
+    url = endpoint + '/translate'
+    # Build the request
+    params = {
+        'api-version': '3.0',
+        'from': source_language,
+        'to': target_language
+    }
+    headers = {
+        'Ocp-Apim-Subscription-Key': key,
+        'Ocp-Apim-Subscription-Region': region,
+        'Content-type': 'application/json'
+    }
+    body = [{
+        'text': text
+    }]
+    # Send the request and get response
+    request = requests.post(url, params=params, headers=headers, json=body, verify=False)
+    response = request.json()
+    # Get translation
+    translation = response[0]["translations"][0]["text"]
+    # Return the translation
+    st.markdown(translation)
 
 
 st.title('Azure AI Demo App')
@@ -72,7 +141,7 @@ if page == "Pre-Trained ML Model":
     model = joblib.load('xgbpipe.joblib')
     # st.title('Did they survive? :ship:')
     # PassengerId,Pclass,Name,Sex,Age,SibSp,Parch,Ticket,Fare,Cabin,Embarked
-    # passengerid = st.text_input("Input Passenger ID", '123456') 
+    # passengerid = st.text_input("Input Passenger ID", '123456')
     passengerid = "123456"
     pclass = st.selectbox('Ticket class (1 = 1st, 2 = 2nd, 3 = 3rd)', [1, 2, 3])
     # name  = st.text_input("Input Passenger Name", 'John Smith')
@@ -84,7 +153,7 @@ if page == "Pre-Trained ML Model":
     # ticket = st.text_input("Input Ticket Number", "12345")
     ticket = "12345"
     fare = st.number_input("Input Fare Price", 0,1000, 50)
-    cabin = st.text_input("Input Cabin", "C52") 
+    cabin = st.text_input("Input Cabin", "C52")
     embarked = st.selectbox("Did they Embark?", ['S','C','Q'])
 
     trigger = st.button('Predict', on_click=predict)
@@ -94,7 +163,15 @@ if page == "Pre-Trained ML Model":
 if page == "ChatGPT":
     st.markdown("Ask questions to the OpenAI `gpt-3.5-turbo` model")
     content = st.text_input("Question", "Write me a Terraform script to create a resource group in Azure.")
-    
+
     ask = st.button('Ask')
     if ask:
         ask_gpt(content)
+
+if page == "Cognitive Services":
+    st.markdown("Translate text using Azure Cognitive Services")
+    text = st.text_input("Text", "Hello world!")
+    language = st.selectbox('Language', ['fr', 'zu'])
+    translate = st.button('Translate')
+    if translate:
+        translate_text(text, language)

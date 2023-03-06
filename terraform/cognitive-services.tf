@@ -4,7 +4,7 @@ resource "azurerm_cognitive_account" "translate" {
   resource_group_name                = data.azurerm_resource_group.ai-demo.name
   kind                               = var.cognitive_kind
   sku_name                           = var.cognitive_sku
-  custom_subdomain_name              = var.cognitive_custom_subdomain
+  # custom_subdomain_name              = "cs${var.cognitive_custom_subdomain}${random_string.build_index.result}"
   outbound_network_access_restricted = true
   public_network_access_enabled      = false
 

@@ -27,3 +27,7 @@ output "ado_project_name" {
   value       = var.ado_project_name
   description = "Azure DevOps project"
 }
+
+output "terraform_pipeline" {
+  value = azuredevops_build_definition.build_definition["pipeline1"].id
+}

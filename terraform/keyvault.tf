@@ -5,8 +5,17 @@ resource "azurerm_key_vault" "application" {
   tenant_id                     = data.azurerm_client_config.current.tenant_id
   soft_delete_retention_days    = 7
   sku_name                      = "standard"
-  public_network_access_enabled = false
-  tags                          = var.tags
+  # Status=403 Code="Forbidden" Message="Connection is not an approved private link and caller was ignored because bypass is not set to 'AzureServices' and PublicNetworkAccess is set to 'Disabled'.
+  public_network_access_enabled = true
+
+  network_acls {
+    default_action = "Allow"
+    bypass         = "AzureServices"
+    # virtual_network_subnet_ids = [var.subnet_id]
+    # ip_rules                   = [var.myip]
+  }
+
+  tags = var.tags
 }
 
 resource "azurerm_key_vault_access_policy" "app" {
@@ -78,10 +87,18 @@ resource "azurerm_key_vault_secret" "openai" {
   name         = "openai-api-key"
   value        = var.openai_api_key
   key_vault_id = azurerm_key_vault.application.id
+
+  depends_on = [
+    azurerm_private_endpoint.kv
+  ]
 }
 
 resource "azurerm_key_vault_secret" "cogkey" {
   name         = "cog-service-key"
   value        = azurerm_cognitive_account.translate.primary_access_key
   key_vault_id = azurerm_key_vault.application.id
+
+  depends_on = [
+    azurerm_private_endpoint.kv
+  ]
 }
