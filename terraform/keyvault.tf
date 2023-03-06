@@ -5,7 +5,7 @@ resource "azurerm_key_vault" "application" {
   tenant_id                     = data.azurerm_client_config.current.tenant_id
   soft_delete_retention_days    = 7
   sku_name                      = "standard"
-  public_network_access_enabled = true
+  public_network_access_enabled = false
   tags                          = var.tags
 }
 
@@ -20,7 +20,7 @@ resource "azurerm_key_vault_access_policy" "app" {
   ]
 }
 
-resource "azurerm_key_vault_access_policy" "app" {
+resource "azurerm_key_vault_access_policy" "sp" {
   key_vault_id = azurerm_key_vault.application.id
   tenant_id    = data.azurerm_client_config.current.tenant_id
   object_id    = data.azurerm_client_config.current.object_id
