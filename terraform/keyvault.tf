@@ -89,7 +89,8 @@ resource "azurerm_key_vault_secret" "openai" {
   key_vault_id = azurerm_key_vault.application.id
 
   depends_on = [
-    azurerm_private_endpoint.kv
+    azurerm_private_endpoint.kv,
+    azurerm_key_vault_access_policy.sp
   ]
 }
 
@@ -99,6 +100,7 @@ resource "azurerm_key_vault_secret" "cogkey" {
   key_vault_id = azurerm_key_vault.application.id
 
   depends_on = [
-    azurerm_private_endpoint.kv
+    azurerm_private_endpoint.kv,
+    azurerm_key_vault_access_policy.sp
   ]
 }
