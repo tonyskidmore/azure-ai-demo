@@ -28,10 +28,6 @@ resource "azuredevops_build_definition" "build_definition" {
   name       = each.value.name
   path       = each.value.path
 
-  ci_trigger {
-    use_yaml = true
-  }
-
   repository {
     repo_type   = "TfsGit"
     repo_id     = azuredevops_git_repository.repository[each.value.repo_ref].id
