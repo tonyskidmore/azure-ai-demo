@@ -1,6 +1,6 @@
 # Azure DevOps Demo Environment
 
-This creates an Azure DevOps project that can be used to run Pipelines to create other examples.
+This creates an Azure DevOps project that can be used to run Pipelines to create the Azure AI demo environment.
 By default the project will be called `azure-ai-demo`.  It will create the following items in the project:
 
 | Item                       | Description                                                                                          |
@@ -19,26 +19,35 @@ Azure resources are also create:
 
 | Item                   | Default                       | Description                                                                                          |
 |------------------------|-------------------------------|------------------------------------------------------------------------------------------------------|
-| Resource group         | rg-demo-azure-devops-vmss     | Service connection that will be used as the connection for Azure Scale Set agents                    |
-| Network security group | nsg-demo-azure-devops-vmss    | A default Network security                                                                           |
-| Storage account        | sademovmss{000000}            | Storage account for Terraform state named sademovmss + 6 numeric digits                              |
-| Virtual network        | vnet-demo-azure-devops-vmss   | Virtual network with an address space of 192.168.0.0/16                                              |
-| Subnet                 | snet-demo-azure-devops-vmss   | Subnet with a subnet mask of 192.168.0.0/24                                                          |
+| Resource group         | rg-azure-ai-demo-bootstrap    | Service connection that will be used as the connection for Azure Scale Set agents                    |
+| Network security group | TBD                           | A default Network security                                                                           |
+| Storage account        | sademoai{000000}              | Storage account for Terraform state named sademovmss + 6 numeric digits                              |
+| Virtual network        | vnet-azure-ai-demo            | Virtual network with an address space of 192.168.0.0/16                                              |
+| Subnets                | multiple                      | Subnets for ADO VMSS agents, app service vnet integration and private endpoints                      |
 
 _Note:_
 All resources are deployed into the single resource group to keep things contained and easier to destroy.
-Individual examples will create additional resources in the same resource group.
-The demos makes efforts to keep costs as low as possible but some charges will be incurred for the resources deployed.
 
 ## Requirements
 
 The requirements defined in the main README of this repository plus the below:
 
 ### Azure
-Subscription level service principal with:
+Running the bootstrap Terraform code:  
+
+User with Subscription level access of:
 Contributor + User Access Administrator
 OR
 Owner
+
+Service principal created with:
+````bash
+
+az ad sp create-for-rbac --name azure-ai-demo \
+                         --role reader \
+                         --scopes /subscriptions/00000000-0000-0000-0000-000000000000
+
+````
 
 ### Azure DevOps
 Personal Access Token - Full Access
@@ -51,12 +60,13 @@ Certain environment variables need to be defined prior to creating the demo envi
 
 ````bash
 
-# authenticate Terraform to Azure - replace values with your tenant, subscription and service principal values
+# values from the above created service principal - replace values with your tenant, subscription and service principal values
 # set the values containing secrets and values
- export ARM_SUBSCRIPTION_ID=00000000-0000-0000-0000-000000000000
- export ARM_TENANT_ID=00000000-0000-0000-0000-000000000000
- export ARM_CLIENT_ID=00000000-0000-0000-0000-000000000000
- export ARM_CLIENT_SECRET=<secret-here>
+ export AZ_SUBSCRIPTION_ID=00000000-0000-0000-0000-000000000000
+ export AZ_TENANT_ID=00000000-0000-0000-0000-000000000000
+ export AZ_CLIENT_ID=00000000-0000-0000-0000-000000000000
+ export AZ_CLIENT_SECRET=<secret-here>
+ export OPENAI_API_KEY=<key-here>
 
  export AZDO_PERSONAL_ACCESS_TOKEN="your PAT here" # full access
 export AZDO_ORG_SERVICE_URL="https://dev.azure.com/tonyskidmore" # your organization
@@ -64,15 +74,16 @@ export AZDO_ORG_SERVICE_URL="https://dev.azure.com/tonyskidmore" # your organiza
 # reference the above to pass into Terraform
 export TF_VAR_ado_org="$AZDO_ORG_SERVICE_URL"
 export TF_VAR_ado_ext_pat="$AZDO_PERSONAL_ACCESS_TOKEN"
-export TF_VAR_serviceprincipalid="$ARM_CLIENT_ID"
-export TF_VAR_serviceprincipalkey="$ARM_CLIENT_SECRET"
-export TF_VAR_azurerm_spn_tenantid="$ARM_TENANT_ID"
-export TF_VAR_azurerm_subscription_id="$ARM_SUBSCRIPTION_ID"
+export TF_VAR_serviceprincipalid="$AZ_CLIENT_ID"
+export TF_VAR_serviceprincipalkey="$AZ_CLIENT_SECRET"
+export TF_VAR_azurerm_spn_tenantid="$AZ_TENANT_ID"
+export TF_VAR_azurerm_subscription_id="$AZ_SUBSCRIPTION_ID"
 
-git clone https://github.com/tonyskidmore/terraform-azurerm-vmss-devops-agent.git
-cd demo_environment
+git clone https://github.com/tonyskidmore/azure-ai-demo.git
+cd bootstrap
+az login # if not login with user permissions as mentioned above
 terraform init
-terraform plan -out tfplan # -var ado_project_visibility=public # add this to make public for unlimited parallel pipelines
+terraform plan -out tfplan
 terraform apply tfplan
 
 ````
@@ -80,11 +91,10 @@ _Note:_
 The Azure DevOps Terraform provider occasionally throws up `Internal Error Occurred` errors.
 If it does just re-run the `plan` and `apply` steps and it should go through OK.
 
+Open Azure DevOps and explore the `azure-ai-demo` project.  Review the Pipelines.
 
-
-Open Azure DevOps and explore the `azure-ai-demo` project.  Review the [examples README](../examples/README.md) to see what examples are available.
-
-To destroy the demo environment, first run the destroy pipeline for each of any examples you have deployed and then run:
+To destroy the demo environment, first run the **terraform** pipeline and choose the destroy option to delete the contents of the demo resource group.
+Then from the location that the bootstrap code was run from:
 
 ````bash
 
@@ -96,6 +106,6 @@ terraform apply tfplan
 If you find yourself in a position that things have not destroyed correctly you can take manual steps to tidy up:
 
 * In Azure DevOps delete the `azure-ai-demo` project
-* In Azure DevOps at the Organization level remove teh `vmss-bootstrap-pool` and any `vmss-agent-pool-*` agent pools that were created by the demo environment
-* In Azure delete the `rg-demo-azure-devops-vmss` resource group
-* Locally from the `demo_environment` directory remove `terraform.tfstate*`
+* In Azure DevOps at the Organization level remove the `vmss-bootstrap-pool` agent pool.
+* In Azure delete the `rg-azure-ai-demo` and `rg-azure-ai-demo-bootstrap` resource groups.
+* Locally from the `bootstrap` directory remove `terraform.tfstate*`

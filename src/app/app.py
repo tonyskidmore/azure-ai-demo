@@ -9,6 +9,7 @@ import os
 import pandas as pd
 import streamlit as st
 from collections import namedtuple
+from os import environ
 from utils import PrepProcesor, columns 
 
 def predict(): 
@@ -20,10 +21,25 @@ def predict():
     else: 
         st.error('Passenger did not Survive :thumbsdown:') 
 
+def ask_gpt(content, role="user"):
+    if os.environ.get("OPENAI_API_KEY") is not None:
+        openai.api_key = os.getenv("OPENAI_API_KEY")
+
+        completion = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": role, "content": content}
+            ]
+        )
+        for choice in completion.choices:
+          st.markdown(choice.message.content)
+    else:
+        st.markdown("You need to set the OPENAI_API_KEY environment variable to a valid OpenAI API key :no_entry_sign:")
+
 
 st.title('Azure AI Demo App')
 
-page = st.sidebar.selectbox('Page Navigation', ["Streamlit", "Model Analysis", "OpenAI"])
+page = st.sidebar.selectbox('Page Navigation', ["Streamlit", "Pre-Trained ML Model", "ChatGPT", "Cognitive Services"])
 
 st.sidebar.markdown("""---""")
 st.sidebar.write("Created by [Tony Skidmore](https://www.skidmore.co.uk)")
@@ -50,8 +66,9 @@ if page == "Streamlit":
             .mark_circle(color='#0068c9', opacity=0.5)
             .encode(x='x:Q', y='y:Q'))
 
-if page == "Model Analysis":
+if page == "Pre-Trained ML Model":
     st.markdown("Titanic survival ML model")
+
     model = joblib.load('xgbpipe.joblib')
     # st.title('Did they survive? :ship:')
     # PassengerId,Pclass,Name,Sex,Age,SibSp,Parch,Ticket,Fare,Cabin,Embarked
@@ -72,15 +89,12 @@ if page == "Model Analysis":
 
     trigger = st.button('Predict', on_click=predict)
 
-if page == "OpenAI":
-    st.empty()
-    openai.api_key = os.getenv("OPENAI_API_KEY")
+    st.markdown("[GitHub](https://github.com/nicknochnack/StreamlitTitanic) code")
 
-    completion = openai.ChatCompletion.create(
-    model="gpt-3.5-turbo",
-    messages=[
-        {"role": "user", "content": "Tell the world about the ChatGPT API in the style of a pirate."}
-    ]
-    )
-
-    st.text_area(completion.choices[0].message.content)
+if page == "ChatGPT":
+    st.markdown("Ask questions to the OpenAI `gpt-3.5-turbo` model")
+    content = st.text_input("Question", "Write me a Terraform script to create a resource group in Azure.")
+    
+    ask = st.button('Ask')
+    if ask:
+        ask_gpt(content)

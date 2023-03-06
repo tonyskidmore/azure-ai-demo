@@ -28,6 +28,10 @@ resource "azuredevops_build_definition" "build_definition" {
   name       = each.value.name
   path       = each.value.path
 
+  ci_trigger {
+    use_yaml = true
+  }
+
   repository {
     repo_type   = "TfsGit"
     repo_id     = azuredevops_git_repository.repository[each.value.repo_ref].id
@@ -121,7 +125,6 @@ resource "azuredevops_resource_authorization" "azurerm" {
   for_each    = azuredevops_build_definition.build_definition
   project_id  = azuredevops_project.project.id
   resource_id = azuredevops_serviceendpoint_azurerm.sub.id
-  # definition_id = azuredevops_build_definition.build_definition["pipeline2"].id
   definition_id = each.value.id
   authorized    = true
 }
