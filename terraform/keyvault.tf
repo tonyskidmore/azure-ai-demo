@@ -78,10 +78,18 @@ resource "azurerm_key_vault_secret" "openai" {
   name         = "openai-api-key"
   value        = var.openai_api_key
   key_vault_id = azurerm_key_vault.application.id
+
+  depends_on = [
+    azurerm_private_endpoint.kv
+  ]
 }
 
 resource "azurerm_key_vault_secret" "cogkey" {
   name         = "cog-service-key"
   value        = azurerm_cognitive_account.translate.primary_access_key
   key_vault_id = azurerm_key_vault.application.id
+
+  depends_on = [
+    azurerm_private_endpoint.kv
+  ]
 }
