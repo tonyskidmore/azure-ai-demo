@@ -25,8 +25,8 @@ resource "azurerm_linux_web_app" "application" {
     }
     container_registry_use_managed_identity = true
     always_on                               = true
-    ftps_state                              = "FtpsOnly"
     vnet_route_all_enabled                  = true
+    ftps_state                              = "FtpsOnly"
     http2_enabled                           = true
     minimum_tls_version                     = "1.2"
   }
@@ -50,14 +50,14 @@ resource "azurerm_linux_web_app" "application" {
 
   app_settings = {
     WEBSITES_ENABLE_APP_SERVICE_STORAGE = "false"
-    DOCKER_REGISTRY_SERVER_URL          = "https://${var.acr_name}.azurecr.io"
+    # DOCKER_REGISTRY_SERVER_URL          = "https://${var.acr_name}.azurecr.io"
     WEBSITES_PORT                       = "8501"
     OPENAI_API_KEY                      = "@Microsoft.KeyVault(VaultName=${azurerm_key_vault.application.name};SecretName=openai-api-key)"
     COG_SERVICE_KEY                     = "@Microsoft.KeyVault(VaultName=${azurerm_key_vault.application.name};SecretName=cog-service-key)"
     COG_SERVICE_REGION                  = var.location
     COG_SERVICE_ENDPOINT                = "https://api.cognitive.microsofttranslator.com"
     # https://github.com/hashicorp/terraform-provider-azurerm/issues/19096
-    WEBSITE_PULL_IMAGE_OVER_VNET = true
+    # WEBSITE_PULL_IMAGE_OVER_VNET = true
   }
 }
 

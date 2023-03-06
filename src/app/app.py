@@ -1,5 +1,6 @@
 
 import altair as alt
+import json
 import joblib
 import math
 import matplotlib.pyplot as plt
@@ -9,18 +10,20 @@ import os
 import pandas as pd
 import requests
 import streamlit as st
+import uuid
 from collections import namedtuple
 from os import environ
-from utils import PrepProcesor, columns 
+from utils import PrepProcesor, columns
+
 
 def predict(): 
-    row = np.array([passengerid,pclass,name,sex,age,sibsp,parch,ticket,fare,cabin,embarked]) 
+    row = np.array([passengerid,pclass,name,sex,age,sibsp,parch,ticket,fare,cabin,embarked])
     X = pd.DataFrame([row], columns = columns)
     prediction = model.predict(X)
-    if prediction[0] == 1: 
+    if prediction[0] == 1:
         st.success('Passenger Survived :thumbsup:')
-    else: 
-        st.error('Passenger did not Survive :thumbsdown:') 
+    else:
+        st.error('Passenger did not Survive :thumbsdown:')
 
 def ask_gpt(content, role="user"):
     if os.environ.get("OPENAI_API_KEY") is not None:
@@ -33,76 +36,60 @@ def ask_gpt(content, role="user"):
             ]
         )
         for choice in completion.choices:
-          st.markdown(choice.message.content)
+            st.markdown(choice.message.content)
     else:
         st.markdown("You need to set the OPENAI_API_KEY environment variable to a valid OpenAI API key :no_entry_sign:")
 
 
-def translate_text(text, language):
+def translate_text(text, language, debug):
     try:
         # Get Configuration Settings
         key = os.getenv('COG_SERVICE_KEY')
         region = os.getenv('COG_SERVICE_REGION')
         endpoint = os.getenv('COG_SERVICE_ENDPOINT')
-
-        st.markdown('Detected language of "' + text + '":', detect_language(text, key, region, endpoint))
-        st.markdown(language + ":", translate(text, 'en', language, key, region, endpoint))
-
-        st.markdown('Detected language of "' + text + '":', detect_language(text, key, region, endpoint))
-        st.markdown(language + ":", translate(text, 'en', language, key, region, endpoint))
     except Exception as ex:
         st.exception(ex)
 
+    # Add your key and endpoint
+    key = key
+    endpoint = endpoint
 
-def detect_language(text, key, region, endpoint):
-    # Use the Translator detect function
-    path = '/detect'
-    url = endpoint + path
-    # Build the request
-    params = {
-        'api-version': '3.0'
-    }
-    headers = {
-        'Ocp-Apim-Subscription-Key': key,
-        'Ocp-Apim-Subscription-Region': region,
-        'Content-type': 'application/json'
-    }
-    body = [{
-        'text': text
-    }]
-    # Send the request and get response
-    st.markdown(f"url: {url}")
-    request = requests.post(url, params=params, headers=headers, json=body) # , verify=False
-    response = request.json()
-    # Get language
-    language = response[0]["language"]
-    # Return the language
-    return language
+    # location, also known as region.
+    # required if you're using a multi-service or regional (not global) resource. It can be found in the Azure portal on the Keys and Endpoint page.
+    location = region
 
+    path = '/translate'
+    constructed_url = endpoint + path
 
-def translate(text, source_language, target_language, key, region, endpoint):
-    # Use the Translator translate function
-    url = endpoint + '/translate'
-    # Build the request
     params = {
         'api-version': '3.0',
-        'from': source_language,
-        'to': target_language
+        'from': 'en',
+        'to': [language]
     }
+
     headers = {
         'Ocp-Apim-Subscription-Key': key,
-        'Ocp-Apim-Subscription-Region': region,
-        'Content-type': 'application/json'
+        # location required if you're using a multi-service or regional (not global) resource.
+        'Ocp-Apim-Subscription-Region': location,
+        'Content-type': 'application/json',
+        'X-ClientTraceId': str(uuid.uuid4())
     }
+
+    # You can pass more than one object in body.
     body = [{
         'text': text
     }]
-    # Send the request and get response
-    request = requests.post(url, params=params, headers=headers, json=body) # , verify=False
-    response = request.json()
-    # Get translation
+
+    try:
+        request = requests.post(constructed_url, params=params, headers=headers, json=body, verify=False)
+        response = request.json()
+    except Exception as ex:
+        st.exception(ex)
+
+    if debug:
+        st.markdown(json.dumps(response, sort_keys=True, ensure_ascii=False, indent=4, separators=(',', ': ')))
+
     translation = response[0]["translations"][0]["text"]
-    # Return the translation
     st.markdown(translation)
 
 
@@ -171,7 +158,9 @@ if page == "ChatGPT":
 if page == "Cognitive Services":
     st.markdown("Translate text using Azure Cognitive Services")
     text = st.text_input("Text", "Hello world!")
-    language = st.selectbox('Language', ['fr', 'zu'])
+    # https://learn.microsoft.com/en-us/azure/cognitive-services/translator/language-support
+    language = st.selectbox('Language', ['de', 'es', 'fr', 'it', 'pl'])
+    debug = st.checkbox('debug')
     translate = st.button('Translate')
     if translate:
-        translate_text(text, language)
+        translate_text(text, language, debug)
