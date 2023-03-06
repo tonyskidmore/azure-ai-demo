@@ -21,14 +21,28 @@ create_post_data()
 EOF
 }
 
-data="$(create_post_data)"
+# data="$(create_post_data)"
+data="{}"
 
 # POST https://dev.azure.com/{organization}/{project}/_apis/pipelines/{pipelineId}/runs?api-version=7.0
-export PROJECT=$(terraform output -raw ado_project_name)
-export PIPELINE_ID=$(terraform output -raw terraform_pipeline)
+PROJECT=$(terraform output -raw ado_project_name)
+PIPELINE_ID=$(terraform output -raw terraform_pipeline)
 printf "AZDO_ORG_SERVICE_URL: %s\n" "$AZDO_ORG_SERVICE_URL"
-printf "AZDO_PERSONAL_ACCESS_TOKEN: %s\n" "$AZDO_PERSONAL_ACCESS_TOKEN"
 printf "PROJECT: %s\n" "$PROJECT"
 printf "PIPELINE_ID: %s\n" "$PIPELINE_ID"
-printf "%s/%s/_apis/pipelines/%s/runs?api-version=7.0\n" "$AZDO_ORG_SERVICE_URL" "$project" "$pipeline_id"
+url="${AZDO_ORG_SERVICE_URL}/${PROJECT}/_apis/pipelines/${PIPELINE_ID}/runs?api-version=7.0\n"
+printf "%s\n" "$url"
 echo "$data"
+
+curl \
+--silent \
+--show-error \
+--retry 10 \
+--retry-delay 3 \
+--retry-max-time 120 \
+--max-time 120 \
+--connect-timeout 20 \
+--header "Content-Type: application/json" \
+--request POST \
+--data "$data" \
+--user ":$AZDO_PERSONAL_ACCESS_TOKEN" "$url"

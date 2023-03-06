@@ -72,7 +72,7 @@ def detect_language(text, key, region, endpoint):
     }]
     # Send the request and get response
     st.markdown(f"url: {url}")
-    request = requests.post(url, params=params, headers=headers, json=body, verify=False)
+    request = requests.post(url, params=params, headers=headers, json=body) # , verify=False
     response = request.json()
     # Get language
     language = response[0]["language"]
@@ -98,7 +98,7 @@ def translate(text, source_language, target_language, key, region, endpoint):
         'text': text
     }]
     # Send the request and get response
-    request = requests.post(url, params=params, headers=headers, json=body, verify=False)
+    request = requests.post(url, params=params, headers=headers, json=body) # , verify=False
     response = request.json()
     # Get translation
     translation = response[0]["translations"][0]["text"]
