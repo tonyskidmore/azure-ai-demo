@@ -30,7 +30,7 @@ PIPELINE_ID=$(terraform output -raw terraform_pipeline)
 printf "AZDO_ORG_SERVICE_URL: %s\n" "$AZDO_ORG_SERVICE_URL"
 printf "PROJECT: %s\n" "$PROJECT"
 printf "PIPELINE_ID: %s\n" "$PIPELINE_ID"
-url="${AZDO_ORG_SERVICE_URL}/${PROJECT}/_apis/pipelines/${PIPELINE_ID}/runs?api-version=7.0\n"
+url="${AZDO_ORG_SERVICE_URL}/${PROJECT}/_apis/pipelines/${PIPELINE_ID}/runs?api-version=7.0"
 printf "%s\n" "$url"
 echo "$data"
 

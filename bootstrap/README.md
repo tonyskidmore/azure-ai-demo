@@ -83,6 +83,11 @@ export TF_VAR_openai_api_key="$OPENAI_API_KEY"
 git clone https://github.com/tonyskidmore/azure-ai-demo.git
 cd bootstrap
 az login # if not login with user permissions as mentioned above
+
+# preferably run:
+make deploy
+
+# or alternatively
 terraform init
 terraform plan -out tfplan
 terraform apply tfplan
@@ -99,6 +104,10 @@ Then from the location that the bootstrap code was run from:
 
 ````bash
 
+# preferably run:
+make destroy
+
+# or alternatively
 terraform plan -destroy -out tfplan
 terraform apply tfplan
 

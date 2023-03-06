@@ -1,5 +1,5 @@
 deploy:
-    scripts/pre_check.sh
+	scripts/pre_check.sh
 	terraform init
 	terraform plan -out tfplan
 	terraform apply tfplan
