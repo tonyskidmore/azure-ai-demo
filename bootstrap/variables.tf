@@ -58,6 +58,11 @@ variable "service_endpoint_name" {
   default     = "azure-ai-demo"
 }
 
+variable "openai_api_key" {
+  type        = string
+  description = "OpenAI API Key"
+}
+
 variable "serviceprincipalid" {
   type        = string
   description = "Service principal ID"

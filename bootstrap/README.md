@@ -78,6 +78,7 @@ export TF_VAR_serviceprincipalid="$AZ_CLIENT_ID"
 export TF_VAR_serviceprincipalkey="$AZ_CLIENT_SECRET"
 export TF_VAR_azurerm_spn_tenantid="$AZ_TENANT_ID"
 export TF_VAR_azurerm_subscription_id="$AZ_SUBSCRIPTION_ID"
+export TF_VAR_openai_api_key="$OPENAI_API_KEY"
 
 git clone https://github.com/tonyskidmore/azure-ai-demo.git
 cd bootstrap

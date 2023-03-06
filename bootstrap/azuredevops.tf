@@ -158,6 +158,12 @@ resource "azuredevops_variable_group" "vars" {
   }
 
   variable {
+    name         = "openai_api_key"
+    secret_value = var.openai_api_key
+    is_secret    = true
+  }
+
+  variable {
     name         = "serviceprincipalid"
     secret_value = var.serviceprincipalid
     is_secret    = true
