@@ -23,7 +23,6 @@ resource "azurerm_linux_web_app" "application" {
       docker_image     = "${azurerm_container_registry.acr.name}.azurecr.io/${var.application_name}/${var.application_name}"
       docker_image_tag = "latest"
     }
-    # linux_fx_version                        = "DOCKER|${var.acr_name}${var.application_name}/${var.application_name}:latest"
     container_registry_use_managed_identity = true
     always_on                               = true
     ftps_state                              = "FtpsOnly"
@@ -54,42 +53,11 @@ resource "azurerm_linux_web_app" "application" {
     DOCKER_REGISTRY_SERVER_URL          = "https://${var.acr_name}.azurecr.io"
     WEBSITES_PORT                       = "8501"
     # https://github.com/hashicorp/terraform-provider-azurerm/issues/19096
-    WEBSITE_PULL_IMAGE_OVER_VNET        = true
-    # "DOCKER_REGISTRY_SERVER_USERNAME"     = azurerm_container_registry.acr.admin_username
-    # "DOCKER_REGISTRY_SERVER_PASSWORD"     = azurerm_container_registry.acr.admin_password
+    WEBSITE_PULL_IMAGE_OVER_VNET = true
   }
 }
-
-# site_config {
-#     linux_fx_version = "DOCKER|${local.acr_name}/${each.value}:latest"
-#     acr_use_managed_identity_credentials = true
-# }
-
-# app_settings = {
-#     DOCKER_REGISTRY_SERVER_URL = "https://${local.acr_name}.azurecr.io"
-# }
-
-# identity {
-#     type = "SystemAssigned"
-# } 
-
-
-# data "azurerm_client_config" "current" {}
-
-# resource "azurerm_key_vault_access_policy" "application" {
-#   key_vault_id = var.vault_id
-#   tenant_id    = data.azurerm_client_config.current.tenant_id
-#   object_id    = azurerm_linux_web_app.application.identity[0].principal_id
-
-#   secret_permissions = [
-#     "Get",
-#     "List"
-#   ]
-# }
 
 resource "azurerm_app_service_virtual_network_swift_connection" "swift_connection" {
   app_service_id = azurerm_linux_web_app.application.id
   subnet_id      = data.azurerm_subnet.vnet_integration.id
 }
-
-

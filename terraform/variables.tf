@@ -42,7 +42,6 @@ variable "acr_admin_enabled" {
   default = false
 }
 
-
 variable "acr_identity_type" {
   type        = string
   description = "The type of Managed Identity which should be assigned to the Container Registry. Possible values are SystemAssigned, UserAssigned"
@@ -87,4 +86,28 @@ variable "application_name" {
   type        = string
   description = "Name of the private endpoint subnet"
   default     = "azureaidemo"
+}
+
+variable "cognitive_account_name" {
+  type        = string
+  description = "Azure Cognitive Services Account name"
+  default     = "azureaidemo"
+}
+
+variable "cognitive_sku" {
+  type        = string
+  description = "Azure Cognitive Services SKU"
+  default     = "S1"
+}
+
+variable "cognitive_kind" {
+  type        = string
+  description = "Azure Cognitive Services service"
+  default     = "TextTranslation"
+}
+
+variable "cognitive_custom_subdomain" {
+  type        = string
+  description = "Azure Cognitive Services custom subdomain"
+  default     = null
 }

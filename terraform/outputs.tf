@@ -9,3 +9,7 @@ output "virtual_network" {
 output "vnet_integration_subnet_id" {
   value = data.azurerm_subnet.vnet_integration.id
 }
+
+output "translator" {
+  value = azurerm_cognitive_account.translate
+}
