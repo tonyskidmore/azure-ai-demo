@@ -13,6 +13,7 @@ resource "azuredevops_git_repository" "repository" {
   for_each       = var.git_repos
   project_id     = azuredevops_project.project.id
   name           = each.value.name
+  # TODO: switch to main
   default_branch = "refs/heads/main"
   initialization {
     init_type   = each.value.initialization.init_type
@@ -28,9 +29,14 @@ resource "azuredevops_build_definition" "build_definition" {
   name       = each.value.name
   path       = each.value.path
 
+  ci_trigger {
+    use_yaml = true
+  }
+
   repository {
     repo_type   = "TfsGit"
     repo_id     = azuredevops_git_repository.repository[each.value.repo_ref].id
+    # TODO: switch to main
     branch_name = "refs/heads/main"
     yml_path    = each.value.yml_path
   }

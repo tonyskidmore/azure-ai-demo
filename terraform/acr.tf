@@ -1,5 +1,5 @@
 resource "azurerm_container_registry" "acr" {
-  name                = var.acr_name
+  name                = "cr${var.acr_name}${random_string.build_index.result}"
   resource_group_name = data.azurerm_resource_group.ai-demo.name
   location            = var.location
   sku                 = "Premium"
@@ -21,8 +21,8 @@ resource "azurerm_private_dns_zone" "acr" {
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "acr" {
-  name                = azurerm_container_registry.acr.name
-  resource_group_name = data.azurerm_resource_group.ai-demo.name
+  name                  = azurerm_container_registry.acr.name
+  resource_group_name   = data.azurerm_resource_group.ai-demo.name
   private_dns_zone_name = azurerm_private_dns_zone.acr.name
   virtual_network_id    = data.azurerm_virtual_network.bootstrap.id
 
@@ -31,7 +31,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "acr" {
 
 
 resource "azurerm_private_endpoint" "acr" {
-  name                = var.acr_name
+  name                = "pe-${var.acr_name}-acr"
   location            = var.location
   resource_group_name = data.azurerm_resource_group.ai-demo.name
   subnet_id           = data.azurerm_subnet.private_endpoints.id

@@ -10,7 +10,7 @@ resource "azurerm_service_plan" "application" {
 }
 
 resource "azurerm_linux_web_app" "application" {
-  name                = var.app_service_name
+  name                = "${var.app_service_name}${random_string.build_index.result}"
   resource_group_name = data.azurerm_resource_group.ai-demo.name
   location            = var.location
   service_plan_id     = azurerm_service_plan.application.id
@@ -52,8 +52,12 @@ resource "azurerm_linux_web_app" "application" {
     WEBSITES_ENABLE_APP_SERVICE_STORAGE = "false"
     DOCKER_REGISTRY_SERVER_URL          = "https://${var.acr_name}.azurecr.io"
     WEBSITES_PORT                       = "8501"
+    OPENAI_API_KEY                      = "@Microsoft.KeyVault(VaultName=${azurerm_key_vault.application.name};SecretName=openai-api-key)"
     # https://github.com/hashicorp/terraform-provider-azurerm/issues/19096
     WEBSITE_PULL_IMAGE_OVER_VNET = true
+    COG_SERVICE_KEY              = "key"
+    COG_SERVICE_REGION           = "uksouth"
+    COG_SERVICE_ENDPOINT         = "cs${var.cognitive_account_name}${random_string.build_index.result}.privatelink.cognitiveservices.azure.com"
   }
 }
 

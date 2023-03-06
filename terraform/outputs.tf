@@ -11,5 +11,6 @@ output "vnet_integration_subnet_id" {
 }
 
 output "translator" {
-  value = azurerm_cognitive_account.translate
+  value     = azurerm_cognitive_account.translate
+  sensitive = true
 }

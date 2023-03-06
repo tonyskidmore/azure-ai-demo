@@ -1,6 +1,4 @@
-provider "azurerm" {
-  features {}
-}
+data "azurerm_client_config" "current" {}
 
 resource "random_string" "build_index" {
   length      = 6

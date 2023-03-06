@@ -76,12 +76,6 @@ variable "app_service_name" {
   default     = "azureaidemo"
 }
 
-variable "_name" {
-  type        = string
-  description = "Name of the app service plan"
-  default     = "azureaidemoplan"
-}
-
 variable "application_name" {
   type        = string
   description = "Name of the private endpoint subnet"
@@ -109,5 +103,15 @@ variable "cognitive_kind" {
 variable "cognitive_custom_subdomain" {
   type        = string
   description = "Azure Cognitive Services custom subdomain"
-  default     = null
+}
+
+variable "key_vault_name" {
+  type        = string
+  description = "Name of the Azure Key Vault"
+  default     = "azureaidemo"
+}
+
+variable "openai_api_key" {
+  type        = string
+  description = "OpenAI API Key"
 }

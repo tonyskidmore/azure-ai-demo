@@ -1,20 +1,20 @@
 resource "azurerm_cognitive_account" "translate" {
-  name                              = "cs${var.cognitive_account_name}${random_string.build_index.result}"
-  location                          = var.location
-  resource_group_name               = data.azurerm_resource_group.ai-demo.name
-  kind                              = var.cognitive_kind
-  sku_name                          = var.cognitive_sku
-  custom_subdomain_name             = var.cognitive_custom_subdomain
-  outbound_network_access_restrited = true
-  public_network_access_enabled     = false
+  name                               = "cs${var.cognitive_account_name}${random_string.build_index.result}"
+  location                           = var.location
+  resource_group_name                = data.azurerm_resource_group.ai-demo.name
+  kind                               = var.cognitive_kind
+  sku_name                           = var.cognitive_sku
+  custom_subdomain_name              = var.cognitive_custom_subdomain
+  outbound_network_access_restricted = true
+  public_network_access_enabled      = false
 
   identity {
     type = "SystemAssigned"
   }
 
-  network_acls {
-    default_action = "Allow"
-  }
+  #   network_acls {
+  #     default_action = "Allow"
+  #   }
 }
 
 resource "azurerm_private_dns_zone" "cs" {
@@ -24,7 +24,7 @@ resource "azurerm_private_dns_zone" "cs" {
   tags = var.tags
 }
 
-resource "azurerm_private_dns_zone_virtual_network_link" "acr" {
+resource "azurerm_private_dns_zone_virtual_network_link" "cs" {
   name                  = azurerm_cognitive_account.translate.name
   resource_group_name   = data.azurerm_resource_group.ai-demo.name
   private_dns_zone_name = azurerm_private_dns_zone.cs.name
@@ -34,7 +34,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "acr" {
 }
 
 resource "azurerm_private_endpoint" "cs" {
-  name                = var.cognitive_account_name
+  name                = "pe-${var.cognitive_account_name}-cs"
   location            = var.location
   resource_group_name = data.azurerm_resource_group.ai-demo.name
   subnet_id           = data.azurerm_subnet.private_endpoints.id
