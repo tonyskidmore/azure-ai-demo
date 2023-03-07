@@ -29,9 +29,9 @@ resource "azuredevops_build_definition" "build_definition" {
   path            = each.value.path
   agent_pool_name = var.ado_pool_name
 
-  # ci_trigger {
-  #   use_yaml = true
-  # }
+  ci_trigger {
+    use_yaml = true
+  }
 
   repository {
     repo_type   = "TfsGit"
