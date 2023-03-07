@@ -80,9 +80,17 @@ export TF_VAR_azurerm_spn_tenantid="$AZ_TENANT_ID"
 export TF_VAR_azurerm_subscription_id="$AZ_SUBSCRIPTION_ID"
 export TF_VAR_openai_api_key="$OPENAI_API_KEY"
 
+````
+
+## Boostrapping the Azure environment
+
+The preferred and automated method to bootstrap Azure is to use the `make deploy` command, as it will check for the required environment variables, run the necessary terraform commands and automatically run the `terraform` pipeline in the created Azure DevOps project, this will deploy the 2 resource groups that form the location of the resources used in this demo.
+
+````bash
+
 git clone https://github.com/tonyskidmore/azure-ai-demo.git
 cd bootstrap
-az login # if not login with user permissions as mentioned above
+az login # login with user permissions as mentioned above
 
 # preferably run:
 make deploy
@@ -93,13 +101,14 @@ terraform plan -out tfplan
 terraform apply tfplan
 
 ````
+
 _Note:_
 The Azure DevOps Terraform provider occasionally throws up `Internal Error Occurred` errors.
 If it does just re-run the `plan` and `apply` steps and it should go through OK.
 
 Open Azure DevOps and explore the `azure-ai-demo` project.  Review the Pipelines.
 
-To destroy the demo environment, first run the **terraform** pipeline and choose the destroy option to delete the contents of the demo resource group.
+To destroy the demo environment, **first run** the **terraform** pipeline and choose the destroy option to delete the contents of the demo resource group.
 Then from the location that the bootstrap code was run from:
 
 ````bash

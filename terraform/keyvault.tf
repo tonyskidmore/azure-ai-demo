@@ -1,10 +1,10 @@
 resource "azurerm_key_vault" "application" {
-  name                          = "kv${var.key_vault_name}${random_string.build_index.result}"
-  resource_group_name           = data.azurerm_resource_group.ai-demo.name
-  location                      = var.location
-  tenant_id                     = data.azurerm_client_config.current.tenant_id
-  soft_delete_retention_days    = 7
-  sku_name                      = "standard"
+  name                       = "kv${var.key_vault_name}${random_string.build_index.result}"
+  resource_group_name        = data.azurerm_resource_group.ai-demo.name
+  location                   = var.location
+  tenant_id                  = data.azurerm_client_config.current.tenant_id
+  soft_delete_retention_days = 7
+  sku_name                   = "standard"
   # Status=403 Code="Forbidden" Message="Connection is not an approved private link and caller was ignored because bypass is not set to 'AzureServices' and PublicNetworkAccess is set to 'Disabled'.
   public_network_access_enabled = true
 

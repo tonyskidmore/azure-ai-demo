@@ -1,9 +1,9 @@
 resource "azurerm_container_registry" "acr" {
-  name                          = "cr${var.acr_name}${random_string.build_index.result}"
-  resource_group_name           = data.azurerm_resource_group.ai-demo.name
-  location                      = var.location
-  sku                           = "Premium"
-  admin_enabled                 = var.acr_admin_enabled
+  name                = "cr${var.acr_name}${random_string.build_index.result}"
+  resource_group_name = data.azurerm_resource_group.ai-demo.name
+  location            = var.location
+  sku                 = "Premium"
+  admin_enabled       = var.acr_admin_enabled
   # enabling for demo puproses
   public_network_access_enabled = true
 
