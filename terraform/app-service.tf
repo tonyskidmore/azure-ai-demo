@@ -20,7 +20,7 @@ resource "azurerm_linux_web_app" "application" {
 
   site_config {
     application_stack {
-      docker_image     = "${azurerm_container_registry.acr.name}.azurecr.io/${var.application_name}/${var.application_name}"
+      docker_image     = "${azurerm_container_registry.acr.name}.azurecr.io/${var.app_service_name}${random_string.build_index.result}/${var.app_service_name}${random_string.build_index.result}"
       docker_image_tag = "latest"
     }
     container_registry_use_managed_identity = true

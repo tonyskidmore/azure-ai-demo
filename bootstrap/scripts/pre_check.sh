@@ -7,7 +7,10 @@ required_variables=("AZ_SUBSCRIPTION_ID" "AZ_TENANT_ID" "AZ_CLIENT_ID"
 
 for i in "${required_variables[@]}"
 do
-    printf "%s: %s\n" "$i" "${!i}"
+    # if ! echo "$i" | grep -i "token"
+    # then
+    #   printf "%s: %s\n" "$i" "${!i}"
+    # fi
     if [[ -z "${!i}" ]]
     then
       echo "Value for $i cannot be empty"
