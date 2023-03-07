@@ -50,5 +50,5 @@ jobs:
       uses: docker/build-push-action@v3
       with:
         tags: ${{ steps.meta.outputs.tags }}
-        context: .
+        context: ./src
         push: true
