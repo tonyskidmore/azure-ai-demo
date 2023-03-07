@@ -30,7 +30,19 @@ All resources are deployed into the single resource group to keep things contain
 
 ## Requirements
 
-The requirements defined in the main README of this repository plus the below:
+* An Azure subscription.
+  _Note:_ you can get started with a [Azure free account][azure-free]
+
+* An [Azure DevOps][azdo] [Organization][azdo-org].
+  _Note:_ you can sign up for free in the preceding link.
+
+
+* An Azure DevOps [Personal Access Token][azdo-pat](PAT) created with at least Agent Pools (Read & manage) and Service Connections (Read & query) permissions (some examples will need more extensive permissions)
+
+* A Linux based system is required to execute this Terraform module, with the following commands installed:
+  - cat
+  - curl
+  - make
 
 ### Azure
 Running the bootstrap Terraform code:  
@@ -84,6 +96,8 @@ export TF_VAR_openai_api_key="$OPENAI_API_KEY"
 
 ## Boostrapping the Azure environment
 
+### Deploy
+
 The preferred and automated method to bootstrap Azure is to use the `make deploy` command, as it will check for the required environment variables, run the necessary terraform commands and automatically run the `terraform` pipeline in the created Azure DevOps project, this will deploy the 2 resource groups that form the location of the resources used in this demo.
 
 ````bash
@@ -108,6 +122,14 @@ If it does just re-run the `plan` and `apply` steps and it should go through OK.
 
 Open Azure DevOps and explore the `azure-ai-demo` project.  Review the Pipelines.
 
+### Pipelines
+
+The `terraform` pipeline deploys all of the needed infrastructure, it will be run automatically if you use the `make deploy` option, if not that will need to be run first.  
+
+To deploy the application run the `application` pipeline.
+
+### Destroy
+
 To destroy the demo environment, **first run** the **terraform** pipeline and choose the destroy option to delete the contents of the demo resource group.
 Then from the location that the bootstrap code was run from:
 
@@ -128,3 +150,8 @@ If you find yourself in a position that things have not destroyed correctly you 
 * In Azure DevOps at the Organization level remove the `vmss-bootstrap-pool` agent pool.
 * In Azure delete the `rg-azure-ai-demo` and `rg-azure-ai-demo-bootstrap` resource groups.
 * Locally from the `bootstrap` directory remove `terraform.tfstate*`
+
+[azdo-pat]: https://learn.microsoft.com/en-us/azure/devops/organizations/accounts/use-personal-access-tokens-to-authenticate
+[azure-free]: https://azure.microsoft.com/en-gb/free
+[azdo]: https://azure.microsoft.com/en-gb/products/devops
+[azdo-org]: https://learn.microsoft.com/en-us/azure/devops/organizations/accounts/create-organization
