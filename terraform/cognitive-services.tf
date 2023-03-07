@@ -4,7 +4,7 @@ resource "azurerm_cognitive_account" "translate" {
   resource_group_name                = data.azurerm_resource_group.ai-demo.name
   kind                               = var.cognitive_kind
   sku_name                           = var.cognitive_sku
-  custom_subdomain_name              = cognitive_private_link ? "cs${var.cognitive_custom_subdomain}${random_string.build_index.result}" : null
+  custom_subdomain_name              = var.cognitive_private_link ? "cs${var.cognitive_custom_subdomain}${random_string.build_index.result}" : null
   outbound_network_access_restricted = true
   public_network_access_enabled      = false
 
@@ -18,7 +18,7 @@ resource "azurerm_cognitive_account" "translate" {
 }
 
 resource "azurerm_private_dns_zone" "cs" {
-  count               = cognitive_private_link ? 1 : 0
+  count               = var.cognitive_private_link ? 1 : 0
   name                = "privatelink.cognitiveservices.azure.com"
   resource_group_name = data.azurerm_resource_group.ai-demo.name
 
@@ -26,7 +26,7 @@ resource "azurerm_private_dns_zone" "cs" {
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "cs" {
-  count                 = cognitive_private_link ? 1 : 0
+  count                 = var.cognitive_private_link ? 1 : 0
   name                  = azurerm_cognitive_account.translate.name
   resource_group_name   = data.azurerm_resource_group.ai-demo.name
   private_dns_zone_name = azurerm_private_dns_zone.cs.name
@@ -36,7 +36,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "cs" {
 }
 
 resource "azurerm_private_endpoint" "cs" {
-  count               = cognitive_private_link ? 1 : 0
+  count               = var.cognitive_private_link ? 1 : 0
   name                = "pe-${var.cognitive_account_name}-cs"
   location            = var.location
   resource_group_name = data.azurerm_resource_group.ai-demo.name
