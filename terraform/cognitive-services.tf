@@ -5,8 +5,8 @@ resource "azurerm_cognitive_account" "translate" {
   kind                               = var.cognitive_kind
   sku_name                           = var.cognitive_sku
   custom_subdomain_name              = var.cognitive_private_link ? "cs${var.cognitive_custom_subdomain}${random_string.build_index.result}" : null
-  outbound_network_access_restricted = var.cognitive_private_link ? true : false
-  public_network_access_enabled      = var.cognitive_private_link ? true : false
+  outbound_network_access_restricted = var.cognitive_private_link ? false : true
+  public_network_access_enabled      = var.cognitive_private_link ? false : true
 
   identity {
     type = "SystemAssigned"
