@@ -141,7 +141,7 @@ if page == "Pre-Trained ML Model":
     ticket = "12345"
     fare = st.number_input("Input Fare Price", 0,1000, 50)
     cabin = st.text_input("Input Cabin", "C52")
-    embarked = st.selectbox("Did they Embark?", ['S','C','Q'])
+    embarked = st.selectbox("Where did they Embark? (Southampton, Cherbourg, Queenstown)", ['S','C','Q'])
 
     trigger = st.button('Predict', on_click=predict)
 

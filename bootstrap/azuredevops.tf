@@ -24,9 +24,10 @@ resource "azuredevops_git_repository" "repository" {
 resource "azuredevops_build_definition" "build_definition" {
   for_each = var.build_definitions
 
-  project_id = azuredevops_project.project.id
-  name       = each.value.name
-  path       = each.value.path
+  project_id      = azuredevops_project.project.id
+  name            = each.value.name
+  path            = each.value.path
+  agent_pool_name = var.ado_pool_name
 
   ci_trigger {
     use_yaml = true
@@ -35,7 +36,7 @@ resource "azuredevops_build_definition" "build_definition" {
   repository {
     repo_type   = "TfsGit"
     repo_id     = azuredevops_git_repository.repository[each.value.repo_ref].id
-    branch_name = "refs/heads/main"
+    branch_name = "main"
     yml_path    = each.value.yml_path
   }
 }
