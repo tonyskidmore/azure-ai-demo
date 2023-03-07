@@ -2,7 +2,11 @@
 
 ## Overview
 
-This repo contains code for creating and deploying an example [Streamlit](https://streamlit.io/) application.  Streamlit is a great Python based library that allows the easy creation of simple but effective web applications.  
+This repo contains code for creating and deploying an example [Streamlit](https://streamlit.io/) application.  
+
+"Streamlit is an open-source Python library for building data science web applications. It allows data scientists and machine learning engineers to easily create interactive web applications with simple, easy-to-use Python syntax. With streamlit, data scientists can quickly prototype and deploy deep learning and machine learning models, create dashboards, and build data analysis tools. Streamlit can be used to create web applications for a wide range of tasks, from data exploration to predictive modeling and decision making. The library is built on top of popular Python data science libraries such as Pandas, NumPy, and Matplotlib, and it integrates easily with data sources and web frameworks."  
+
+_Note: The above paragraph was written by the ChatGPT page from the demo application._  
 
 The demo application was created to show how you can use the following:
 
