@@ -46,6 +46,7 @@ jobs:
           type=semver,pattern={{version}}
         flavor: |
           latest=true
+
     - name: Push image
       uses: docker/build-push-action@v3
       with:
