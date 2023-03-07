@@ -17,7 +17,7 @@ This repo contains code for creating and deploying an example [Streamlit](https:
 
 _Note: The above paragraph was written by the ChatGPT page from the demo application._  
 
-![azure-ai-demo](images/azure-ai-demo.pngdrawing.jpg)
+![azure-ai-demo](images/azure-ai-demo.png)
 
 The demo application was created to show how you can use the following:
 
