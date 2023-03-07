@@ -1,5 +1,14 @@
 # azure-ai-demo
 
+1. [Overview](#overview)
+2. [Run the application locally](#run-the-application-locally)
+   * [Pull from GitHub Packages](#pull-from-github-packages)
+   * [Build the application locally](#build-the-application-locally)
+3. [Deploying to Azure and Azure DevOps](#deploying-to-azure-and-azure-devops)
+4. [Azure Cognitive Services](#azure-cognitive-services)
+5. [OpenAI ChatGPT](#openai-chatgpt)
+6. [Acknowledgements](#acknowledgements)
+
 ## Overview
 
 This repo contains code for creating and deploying an example [Streamlit](https://streamlit.io/) application.  
@@ -15,7 +24,29 @@ The demo application was created to show how you can use the following:
 * Using OpenAI REST API as part of an application.
 * Using Azure Cognitive Services to provide easy to consume AI to enhance your application.
 
-## Build the application locally
+## Run the application locally
+
+### Pull from GitHub Packages
+
+If you have Docker installed locally then you can pull and run the published container locally:
+
+````bash
+
+docker run \
+  --rm \
+  -e OPENAI_API_KEY="$OPENAI_API_KEY" \
+  -e COG_SERVICE_KEY=<key> \
+  -e COG_SERVICE_REGION="uksouth" \
+  -e COG_SERVICE_ENDPOINT=https://api.cognitive.microsofttranslator.com \
+  -p 8501:8501 \
+  --name azure-ai-demo ghcr.io/tonyskidmore/azure-ai-demo:latest
+
+# open http://localhost:8501 in your local browser
+
+````
+For the values for `OPENAI_API_KEY` and `COG_SERVICE_KEY` please refer to [OpenAI ChatGPT](#openai-chatgpt) and [Azure Cognitive Services](#azure-cognitive-services) sections respectively.
+
+### Build the application locally
 
 If you have Docker installed locally you can build and test the container application locally by following the steps in `src` directory [README](https://github.com/tonyskidmore/azure-ai-demo/blob/main/src/README.md).
 
