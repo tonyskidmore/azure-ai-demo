@@ -1,0 +1,76 @@
+---
+
+name: "application"
+
+trigger:
+- main
+
+resources:
+  pipelines:
+  - pipeline: application
+    source: terraform
+    trigger: true
+  repositories:
+   - repository: self
+   - repository: templates
+     type: git
+     name: pipelines
+
+variables:
+- group: build
+- name: DOCKER_BUILDKIT
+  value: 1
+
+pool:
+  name: 'vmss-bootstrap-pool'
+
+stages:
+
+- stage: app
+
+  jobs:
+  - job: build
+    workspace:
+      clean: all
+    displayName: "Build and push container"
+    continueOnError: false
+    steps:
+
+      - checkout: self
+
+      - checkout: git://$(project)/ai-demo-src
+
+      - script: |
+          env
+        displayName: Debug
+
+      - script: |
+          set -e
+          az login --service-principal -u $(serviceprincipalid) -p $(serviceprincipalkey) --tenant $(azurerm_spn_tenantid)
+          acr_name=$(az acr list --resource-group "$(resource_group)" --query "[0].name" -o tsv)
+          app_name=$(az webapp list --resource-group $(resource_group) --query "[0].name" -o tsv)
+          printf "ACR name: %s\n" "$acr_name"
+          az acr login -n "$acr_name" --subscription $(azurerm_subscription_id)
+          echo "##vso[task.setvariable variable=ACR]$acr_name"
+          echo "##vso[task.setvariable variable=APP]$app_name"
+        displayName: Login
+
+      - script: |
+          set -e
+          docker build -t "${ACR}.azurecr.io/${APP}/${APP}:latest" .
+          docker tag "${ACR}.azurecr.io/${APP}/${APP}:latest" "${ACR}.azurecr.io/${APP}/${APP}:$BUILD_BUILDID"
+          docker push "${ACR}.azurecr.io/${APP}/${APP}:latest"
+          docker push "${ACR}.azurecr.io/${APP}/${APP}:$BUILD_BUILDID"
+        displayName: Docker build and push
+        workingDirectory: '$(System.DefaultWorkingDirectory)/ai-demo-src/src'
+
+      - script: |
+          set -e
+          printf "Setting web app container to %s in resource group %s\n" "${ACR}.azurecr.io/${APP}/${APP}:$BUILD_BUILDID" "$(resource_group)"
+          az webapp config container set \
+            --resource-group "$(resource_group)" \
+            --name "${APP}" \
+            --docker-custom-image-name "${ACR}.azurecr.io/${APP}/${APP}:$BUILD_BUILDID"
+          printf "Restarting web app %s in resource group %s\n" "${APP}" "$(resource_group)"
+          az webapp restart --name "${APP}" --resource-group "$(resource_group)"
+        displayName: Configure and restart web application
