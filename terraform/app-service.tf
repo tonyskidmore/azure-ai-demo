@@ -55,7 +55,7 @@ resource "azurerm_linux_web_app" "application" {
     OPENAI_API_KEY                      = "@Microsoft.KeyVault(VaultName=${azurerm_key_vault.application.name};SecretName=openai-api-key)"
     COG_SERVICE_KEY                     = "@Microsoft.KeyVault(VaultName=${azurerm_key_vault.application.name};SecretName=cog-service-key)"
     COG_SERVICE_REGION                  = var.location
-    COG_SERVICE_ENDPOINT                = "https://api.cognitive.microsofttranslator.com"
+    COG_SERVICE_ENDPOINT                = "https://cs${var.cognitive_custom_subdomain}${random_string.build_index.result}.cognitiveservices.azure.com"
     # https://github.com/hashicorp/terraform-provider-azurerm/issues/19096
     WEBSITE_PULL_IMAGE_OVER_VNET = true
   }
