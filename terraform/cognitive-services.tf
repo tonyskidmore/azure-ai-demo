@@ -29,7 +29,7 @@ resource "azurerm_private_dns_zone_virtual_network_link" "cs" {
   count                 = var.cognitive_private_link ? 1 : 0
   name                  = azurerm_cognitive_account.translate.name
   resource_group_name   = data.azurerm_resource_group.ai-demo.name
-  private_dns_zone_name = azurerm_private_dns_zone.cs.name
+  private_dns_zone_name = azurerm_private_dns_zone.cs[0].name
   virtual_network_id    = data.azurerm_virtual_network.bootstrap.id
 
   tags = var.tags
