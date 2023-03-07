@@ -1,4 +1,4 @@
-ado_pool_name = "vmss-bootstrap-pool"
+ado_pool_name         = "vmss-bootstrap-pool"
 ado_pool_desired_idle = 0
 
 build_definitions = {
