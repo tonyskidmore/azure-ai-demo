@@ -149,7 +149,7 @@ if page == "Pre-Trained ML Model":
 
 if page == "ChatGPT":
     st.markdown("Ask questions to the OpenAI `gpt-3.5-turbo` model")
-    content = st.text_input("Question", "Write me a Terraform script to create a resource group in Azure.")
+    content = st.text_input("Question", "What is Streamlit?")
 
     ask = st.button('Ask')
     if ask:
