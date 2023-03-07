@@ -34,7 +34,7 @@ url="${AZDO_ORG_SERVICE_URL}/${PROJECT}/_apis/pipelines/${PIPELINE_ID}/runs?api-
 printf "%s\n" "$url"
 echo "$data"
 
-curl \
+response=$(curl \
 --silent \
 --show-error \
 --retry 10 \
@@ -45,4 +45,8 @@ curl \
 --header "Content-Type: application/json" \
 --request POST \
 --data "$data" \
---user ":$AZDO_PERSONAL_ACCESS_TOKEN" "$url"
+--user ":$AZDO_PERSONAL_ACCESS_TOKEN" "$url")
+
+echo "$response"
+# pipeline_url=$(echo "$response" | grep -oP '(?<="pipeline":{"url":")(.+)(?=","id)')
+# printf "url: %s\n" "$pipeline_url"
