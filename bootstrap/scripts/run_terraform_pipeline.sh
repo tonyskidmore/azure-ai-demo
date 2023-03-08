@@ -32,7 +32,7 @@ printf "PROJECT: %s\n" "$PROJECT"
 printf "PIPELINE_ID: %s\n" "$PIPELINE_ID"
 url="${AZDO_ORG_SERVICE_URL}/${PROJECT}/_apis/pipelines/${PIPELINE_ID}/runs?api-version=7.0"
 printf "%s\n" "$url"
-echo "$data"
+# echo "$data"
 
 response=$(curl \
 --silent \
@@ -47,6 +47,6 @@ response=$(curl \
 --data "$data" \
 --user ":$AZDO_PERSONAL_ACCESS_TOKEN" "$url")
 
-echo "$response"
-# pipeline_url=$(echo "$response" | grep -oP '(?<="pipeline":{"url":")(.+)(?=","id)')
-# printf "url: %s\n" "$pipeline_url"
+# echo "$response"
+state=$(echo "$response" | grep -oP '(?<="state":")(.+)(?=","createdDate)')
+printf "pipeline state: %s\n" "$state"
