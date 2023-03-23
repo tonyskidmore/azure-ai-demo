@@ -1,5 +1,7 @@
 #!/bin/bash
 
+
+# TODO: set to "refs/heads/main"
 create_post_data()
 {
   cat <<EOF
@@ -7,7 +9,7 @@ create_post_data()
     "resources": {
         "repositories": {
             "self": {
-                "refName": "refs/heads/main"
+                "refName": "refs/heads/pipelines"
             }
         }
     },
@@ -47,6 +49,6 @@ response=$(curl \
 --data "$data" \
 --user ":$AZDO_PERSONAL_ACCESS_TOKEN" "$url")
 
-# echo "$response"
+echo "$response"
 state=$(echo "$response" | grep -oP '(?<="state":")(.+)(?=","createdDate)')
 printf "pipeline state: %s\n" "$state"
