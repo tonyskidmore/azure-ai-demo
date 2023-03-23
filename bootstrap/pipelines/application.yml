@@ -10,7 +10,7 @@ resources:
   - pipeline: application
     source: terraform
     trigger: true
-  repositories:
+  # repositories:
   # - repository: ai-demo-src
   #   type: git
   #   name: ai-demo-src

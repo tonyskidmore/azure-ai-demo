@@ -8,15 +8,9 @@ create_post_data()
 {
     "resources": {
         "repositories": {
-            "self": {
+            "ai-demo-src": {
                 "refName": "refs/heads/pipelines"
             }
-        }
-    },
-    "variables": {
-        "HELLO_WORLD": {
-            "isSecret": false,
-            "value": "HelloWorldValue"
         }
     }
 }
