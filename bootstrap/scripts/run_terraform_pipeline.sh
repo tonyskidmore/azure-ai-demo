@@ -1,9 +1,10 @@
 #!/bin/bash
 
 # export BRANCH_NAME to the desired feature branch if needed
-BRANCH_NAME="${BRANCH_NAME:-refs/heads/main}"
+# or BRANCH_NAME will default to current ref
+BRANCH_NAME="${BRANCH_NAME:-$(git rev-parse --symbolic-full-name HEAD)}"
 # or get current branch
-BRANCH_NAME=$(git rev-parse --symbolic-full-name HEAD)
+# BRANCH_NAME=$(git rev-parse --symbolic-full-name HEAD)
 printf "BRANCH_NAME: %s\n" "$BRANCH_NAME"
 
 create_post_data()
