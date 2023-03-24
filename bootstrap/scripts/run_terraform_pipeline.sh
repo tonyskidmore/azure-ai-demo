@@ -17,8 +17,9 @@ create_post_data()
 EOF
 }
 
-# data="$(create_post_data)"
-data="{}"
+# set depending on requirements
+data="$(create_post_data)"
+# data="{}"
 
 # POST https://dev.azure.com/{organization}/{project}/_apis/pipelines/{pipelineId}/runs?api-version=7.0
 PROJECT=$(terraform output -raw ado_project_name)
