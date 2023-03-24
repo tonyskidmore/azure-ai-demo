@@ -1,7 +1,8 @@
 #!/bin/bash
 
+# export BRANCH_NAME to the desired feature branch if needed
+BRANCH_NAME="${BRANCH_NAME:-refs/heads/main}"
 
-# TODO: set to "refs/heads/main"
 create_post_data()
 {
   cat <<EOF
@@ -9,7 +10,7 @@ create_post_data()
     "resources": {
         "repositories": {
             "ai-demo-src": {
-                "refName": "refs/heads/pipelines"
+                "self":{"refName":"refs/heads/pipelines"}
             }
         }
     }
@@ -17,9 +18,14 @@ create_post_data()
 EOF
 }
 
-# set depending on requirements
-data="$(create_post_data)"
-# data="{}"
+# define data depending on whether we are using the main or featrure branch
+if [[ "$BRANCH_NAME" == "refs/heads/main" ]]
+then
+  data="{}"
+else
+  data="$(create_post_data)"
+fi
+
 
 # POST https://dev.azure.com/{organization}/{project}/_apis/pipelines/{pipelineId}/runs?api-version=7.0
 PROJECT=$(terraform output -raw ado_project_name)
