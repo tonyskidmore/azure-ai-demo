@@ -60,6 +60,14 @@ resource "azurerm_linux_web_app" "application" {
     # https://github.com/hashicorp/terraform-provider-azurerm/issues/19096
     WEBSITE_PULL_IMAGE_OVER_VNET = true
   }
+
+  lifecycle {
+    ignore_changes = [
+      # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/linux_web_app#virtual_network_subnet_id
+      virtual_network_subnet_id,
+      site_config.application_stack
+    ]
+  }
 }
 
 resource "azurerm_app_service_virtual_network_swift_connection" "swift_connection" {
