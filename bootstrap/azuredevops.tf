@@ -21,6 +21,9 @@ resource "azuredevops_git_repository" "repository" {
   }
 }
 
+# error workaround possibilities
+# https://stackoverflow.com/questions/70049758/terraform-for-each-one-by-one
+# https://pet2cattle.com/2021/06/time-sleep-between-resources
 resource "azuredevops_build_definition" "build_definition" {
   for_each = var.build_definitions
 
@@ -45,6 +48,7 @@ resource "azuredevops_build_definition" "build_definition" {
   ]
 }
 
+# https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep
 
 # add permissions to repo for pipeline
 resource "null_resource" "build_definition_repo_perms" {
