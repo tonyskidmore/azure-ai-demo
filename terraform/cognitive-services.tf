@@ -12,6 +12,8 @@ resource "azurerm_cognitive_account" "translate" {
     type = "SystemAssigned"
   }
 
+  # https://learn.microsoft.com/en-us/azure/cognitive-services/cognitive-services-virtual-networks?tabs=portal
+
   #   network_acls {
   #     default_action = "Allow"
   #   }
