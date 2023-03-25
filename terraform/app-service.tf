@@ -65,7 +65,7 @@ resource "azurerm_linux_web_app" "application" {
     ignore_changes = [
       # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/linux_web_app#virtual_network_subnet_id
       virtual_network_subnet_id,
-      site_config.application_stack
+      site_config[0].application_stack
     ]
   }
 }

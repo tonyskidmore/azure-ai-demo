@@ -12,11 +12,11 @@ create_post_data()
   cat <<EOF
 {
     "resources": {
-        "repositories": {
-            "ai-demo-src": {
-                "self":{"refName":"refs/heads/pipelines"}
-            }
+      "repositories": {
+        "self": {
+          "refName":"$BRANCH_NAME"
         }
+      }
     }
 }
 EOF
@@ -39,7 +39,7 @@ printf "PROJECT: %s\n" "$PROJECT"
 printf "PIPELINE_ID: %s\n" "$PIPELINE_ID"
 url="${AZDO_ORG_SERVICE_URL}/${PROJECT}/_apis/pipelines/${PIPELINE_ID}/runs?api-version=7.0"
 printf "%s\n" "$url"
-# echo "$data"
+echo "$data"
 
 response=$(curl \
 --silent \

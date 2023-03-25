@@ -29,3 +29,5 @@ override.tf.json
 *tfplan*
 
 bootstrap/.terraform.lock.hcl
+
+trace.log
