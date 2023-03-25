@@ -3,8 +3,6 @@
 # export BRANCH_NAME to the desired feature branch if needed
 # or BRANCH_NAME will default to current ref
 BRANCH_NAME="${BRANCH_NAME:-$(git rev-parse --symbolic-full-name HEAD)}"
-# or get current branch
-# BRANCH_NAME=$(git rev-parse --symbolic-full-name HEAD)
 printf "BRANCH_NAME: %s\n" "$BRANCH_NAME"
 
 create_post_data()
@@ -39,7 +37,7 @@ printf "PROJECT: %s\n" "$PROJECT"
 printf "PIPELINE_ID: %s\n" "$PIPELINE_ID"
 url="${AZDO_ORG_SERVICE_URL}/${PROJECT}/_apis/pipelines/${PIPELINE_ID}/runs?api-version=7.0"
 printf "%s\n" "$url"
-echo "$data"
+# echo "$data"
 
 response=$(curl \
 --silent \
@@ -54,6 +52,6 @@ response=$(curl \
 --data "$data" \
 --user ":$AZDO_PERSONAL_ACCESS_TOKEN" "$url")
 
-echo "$response"
+# echo "$response"
 state=$(echo "$response" | grep -oP '(?<="state":")(.+)(?=","createdDate)')
 printf "pipeline state: %s\n" "$state"

@@ -1,5 +1,5 @@
 ado_pool_name         = "vmss-bootstrap-pool"
-ado_pool_desired_idle = 1
+ado_pool_desired_idle = 0
 
 build_definitions = {
 
@@ -19,7 +19,7 @@ build_definitions = {
 
 git_repos = {
   "repo1" = {
-    name           = "ai-demo-src",
+    name = "ai-demo-src",
     # default_branch = "refs/heads/main",
     default_branch = "refs/heads/pipelines",
     initialization = {
