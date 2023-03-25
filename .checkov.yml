@@ -1,0 +1,31 @@
+---
+directory:
+  - .
+
+skip-framework:
+  - dockerfile
+  - secrets
+
+skip-check:
+  # "Ensure Azure linux scale set does not use basic authentication(Use SSH Key Instead)"
+  # recommended to use SSH, but module does support password auth too
+  - CKV_AZURE_49
+  # "Ensure that Virtual machine does not enable password authentication"
+  # as above
+  - CKV_AZURE_149
+  # "Ensure that Virtual machine scale sets have encryption at host enabled"
+  # this has to be enabled on the Azure subscription so not making this mandatory in the module, ref:
+  # Use the Azure CLI to enable end-to-end encryption using encryption at host
+  # https://docs.microsoft.com/en-us/azure/virtual-machines/linux/disks-enable-host-based-encryption-cli
+  - CKV_AZURE_97
+  # exclude rules triggered on examples
+  - CKV_AZURE_182 # "Ensure that VNET has at least 2 connected DNS Endpoints"
+  - CKV_AZURE_183 # "Ensure that VNET has at least 2 connected DNS Endpoints"
+  - CKV_AZURE_77 # "Ensure that UDP Services are restricted from the Internet "
+  - CKV_AZURE_160 # "Ensure that HTTP (port 80) access is restricted from the internet"
+  - CKV_AZURE_9 # "Ensure that RDP access is restricted from the internet"
+  - CKV_AZURE_10 # "Ensure that SSH access is restricted from the internet"
+  - CKV_AZURE_178 # "Ensure Windows VM enables SSH with keys for secure communication"
+  - CKV_AZURE_179 # "Ensure VM agent is installed"
+  - CKV_GHA_*
+  - CKV2_GHA_*
