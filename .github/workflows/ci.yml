@@ -6,15 +6,8 @@ permissions:
 name: Lint Code Base
 
 on:
-  schedule:
-    - cron: "00 20 * * 0"
   workflow_dispatch:
-  push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+
 
 jobs:
   build:
