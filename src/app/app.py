@@ -14,8 +14,8 @@ import requests
 import numpy as np
 import pandas as pd
 import streamlit as st
-from utils import columns
-# from utils import PrepProcesor, columns
+# from utils import columns
+from utils import PrepProcesor, columns
 
 
 def predict():

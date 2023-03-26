@@ -3,7 +3,6 @@ directory:
   - .
 
 skip-framework:
-  - dockerfile
   - secrets
 
 skip-check:

@@ -60,6 +60,12 @@ repos:
       hooks:
       - id: flake8
 
+    # match with .devcontainer/init.sh - $hadolint_version
+  - repo: https://github.com/hadolint/hadolint
+    rev: v2.12.0
+    hooks:
+      - id: hadolint
+
   # -   repo: https://github.com/PyCQA/isort
   #     rev: 5.10.1
   #     hooks:
