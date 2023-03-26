@@ -8,4 +8,5 @@ then
   pre-commit install
   pre-commit install-hooks
   terrascan init
+  pip install -r src/app/requirements.txt
 fi

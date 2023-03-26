@@ -6,7 +6,8 @@
 			},
 			"ghcr.io/devcontainers/features/docker-from-docker:1": {
 				"version": "latest"
-			}
+			},
+			"ghcr.io/devcontainers/features/python:1": {}
 	},
 	"remoteUser": "vscode",
 	// .pre-commit-<uuid> creates a unique cache directory in $HOME/.pre-commit for each project
@@ -27,7 +28,10 @@
 				"ms-azuretools.vscode-azureterraform",
 				"shardulm94.trailing-spaces",
 				"streetsidesoftware.code-spell-checker",
-				"wwm.better-align"
+				"wwm.better-align",
+				"ms-python.python",
+        "ms-python.vscode-pylance",
+				"GitHub.copilot"
 			]
 		}
 	}

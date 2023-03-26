@@ -76,11 +76,11 @@ variable "app_service_name" {
   default     = "azureaidemo"
 }
 
-variable "application_name" {
-  type        = string
-  description = "Name of the private endpoint subnet"
-  default     = "azureaidemo"
-}
+# variable "application_name" {
+#   type        = string
+#   description = "Name of the private endpoint subnet"
+#   default     = "azureaidemo"
+# }
 
 variable "cognitive_account_name" {
   type        = string

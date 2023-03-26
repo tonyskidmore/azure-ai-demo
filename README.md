@@ -11,11 +11,11 @@
 
 ## Overview
 
-This repo contains code for creating and deploying an example [Streamlit](https://streamlit.io/) application.  
+This repo contains code for creating and deploying an example [Streamlit](https://streamlit.io/) application.
 
-"Streamlit is an open-source Python library for building data science web applications. It allows data scientists and machine learning engineers to easily create interactive web applications with simple, easy-to-use Python syntax. With streamlit, data scientists can quickly prototype and deploy deep learning and machine learning models, create dashboards, and build data analysis tools. Streamlit can be used to create web applications for a wide range of tasks, from data exploration to predictive modeling and decision making. The library is built on top of popular Python data science libraries such as Pandas, NumPy, and Matplotlib, and it integrates easily with data sources and web frameworks."  
+"Streamlit is an open-source Python library for building data science web applications. It allows data scientists and machine learning engineers to easily create interactive web applications with simple, easy-to-use Python syntax. With streamlit, data scientists can quickly prototype and deploy deep learning and machine learning models, create dashboards, and build data analysis tools. Streamlit can be used to create web applications for a wide range of tasks, from data exploration to predictive modeling and decision making. The library is built on top of popular Python data science libraries such as Pandas, NumPy, and Matplotlib, and it integrates easily with data sources and web frameworks."
 
-_Note: The above paragraph was written by the ChatGPT page from the demo application._  
+_Note: The above paragraph was written by the ChatGPT page from the demo application._
 
 ![azure-ai-demo](images/azure-ai-demo.png)
 
@@ -55,11 +55,11 @@ If you have Docker installed locally you can build and test the container applic
 
 ## Deploying to Azure and Azure DevOps
 
-This repo contains Terraform code to deploy the demo Streamlit containerized application to an Azure Web App, including all of the necessary resources to support the deployment e.g. Virtual network, Subnets, Container registry, KeyVault and Cognitive Services.  
+This repo contains Terraform code to deploy the demo Streamlit containerized application to an Azure Web App, including all of the necessary resources to support the deployment e.g. Virtual network, Subnets, Container registry, KeyVault and Cognitive Services.
 
-It will also create an Azure DevOps project, AzureRM service connection, Pipelines (terraform and application), Scale Set Agent pool with an associated self-hosted Azure Virtual Machine Scale Set on the Virtual network.  
+It will also create an Azure DevOps project, AzureRM service connection, Pipelines (terraform and application), Scale Set Agent pool with an associated self-hosted Azure Virtual Machine Scale Set on the Virtual network.
 
-See the bootstrap [README](https://github.com/tonyskidmore/azure-ai-demo/blob/main/bootstrap/README.md) for more details.  
+See the bootstrap [README](https://github.com/tonyskidmore/azure-ai-demo/blob/main/bootstrap/README.md) for more details.
 
 
 ## Azure Cognitive Services
@@ -68,7 +68,7 @@ If you don't want to do the full automated deployment above but want to test the
 
 ## OpenAI ChatGPT
 
-To test the ChatGPT functionality you will need to create an [OpenAI](https://beta.openai.com/signup) account.  Once you have done that you will need to [sign in](https://platform.openai.com/account) and [create a key](https://platform.openai.com/account/api-keys).  
+To test the ChatGPT functionality you will need to create an [OpenAI](https://beta.openai.com/signup) account.  Once you have done that you will need to [sign in](https://platform.openai.com/account) and [create a key](https://platform.openai.com/account/api-keys).
 
 You will use this to set the `OPENAI_API_KEY` when following either the [Build the application locally](#build-the-application-locally) or [Deploying to Azure and Azure DevOps](#deploying-to-azure-and-azure-devops) sections.
 

@@ -113,10 +113,10 @@ variable "location" {
   description = "Azure region"
 }
 
-variable "nsg_name" {
-  type        = string
-  description = "Name of the Network Security Group"
-}
+# variable "nsg_name" {
+#   type        = string
+#   description = "Name of the Network Security Group"
+# }
 
 variable "tags" {
   type        = map(string)

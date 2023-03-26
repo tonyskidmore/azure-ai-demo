@@ -45,7 +45,7 @@ All resources are deployed into the single resource group to keep things contain
   - make
 
 ### Azure
-Running the bootstrap Terraform code:  
+Running the bootstrap Terraform code:
 
 User with Subscription level access of:
 Contributor + User Access Administrator
@@ -124,7 +124,7 @@ Open Azure DevOps and explore the `azure-ai-demo` project.  Review the Pipelines
 
 ### Pipelines
 
-The `terraform` pipeline deploys all of the needed infrastructure, it will be run automatically if you use the `make deploy` option, if not that will need to be run first.  
+The `terraform` pipeline deploys all of the needed infrastructure, it will be run automatically if you use the `make deploy` option, if not that will need to be run first.
 
 To deploy the application run the `application` pipeline.
 

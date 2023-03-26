@@ -16,6 +16,11 @@ resource "azurerm_container_registry" "acr" {
     enabled = true
   }
 
+  retention_policy {
+    days    = 7
+    enabled = true
+  }
+
   tags = var.tags
 }
 

@@ -1,3 +1,8 @@
+data "azurerm_virtual_network" "bootstrap" {
+  vnet_name           = "vnet-azure-ai-demo"
+  resource_group_name = "rg-azure-ai-demo-bootstrap"
+}
+
 resource "azurerm_key_vault" "application" {
   name                       = "kv${var.key_vault_name}${random_string.build_index.result}"
   resource_group_name        = data.azurerm_resource_group.ai-demo.name
@@ -6,13 +11,14 @@ resource "azurerm_key_vault" "application" {
   soft_delete_retention_days = 7
   sku_name                   = "standard"
   # Status=403 Code="Forbidden" Message="Connection is not an approved private link and caller was ignored because bypass is not set to 'AzureServices' and PublicNetworkAccess is set to 'Disabled'.
-  public_network_access_enabled = true
+  public_network_access_enabled = false
+
+  purge_protection_enabled = true
 
   network_acls {
-    default_action = "Allow"
+    default_action = "Deny"
     bypass         = "AzureServices"
-    # virtual_network_subnet_ids = [var.subnet_id]
-    # ip_rules                   = [var.myip]
+    # virtual_network_subnet_ids = data.azurerm_virtual_network.bootstrap.
   }
 
   tags = var.tags
@@ -84,9 +90,11 @@ resource "azurerm_private_endpoint" "kv" {
 }
 
 resource "azurerm_key_vault_secret" "openai" {
-  name         = "openai-api-key"
-  value        = var.openai_api_key
-  key_vault_id = azurerm_key_vault.application.id
+  name            = "openai-api-key"
+  value           = var.openai_api_key
+  key_vault_id    = azurerm_key_vault.application.id
+  expiration_date = local.secret_expiry_date
+  content_type    = "text/plain"
 
   depends_on = [
     azurerm_private_endpoint.kv,
@@ -95,9 +103,11 @@ resource "azurerm_key_vault_secret" "openai" {
 }
 
 resource "azurerm_key_vault_secret" "cogkey" {
-  name         = "cog-service-key"
-  value        = azurerm_cognitive_account.translate.primary_access_key
-  key_vault_id = azurerm_key_vault.application.id
+  name            = "cog-service-key"
+  value           = azurerm_cognitive_account.translate.primary_access_key
+  key_vault_id    = azurerm_key_vault.application.id
+  expiration_date = local.secret_expiry_date
+  content_type    = "text/plain"
 
   depends_on = [
     azurerm_private_endpoint.kv,
