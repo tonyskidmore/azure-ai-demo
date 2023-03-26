@@ -5,21 +5,18 @@ import math
 import os
 import uuid
 import joblib
-
 import altair as alt
 import openai
-
 import requests
-
 import numpy as np
 import pandas as pd
 import streamlit as st
-# from utils import columns
 from utils import PrepProcesor, columns
 
 
 def predict():
     """ Titanic model prediction """
+
     row = np.array([PASSENGER_ID, pclass, NAME, sex, age,
                     sibsp, parch, TICKET, fare, cabin, embarked])
     data_frame = pd.DataFrame([row], columns=columns)
@@ -48,28 +45,8 @@ def ask_gpt(content, role="user"):
                     "to a valid OpenAI API key :no_entry_sign:")
 
 
-def translate_text(text, language, debug):
-    """ Translate using Cognitive Services Translator"""
-    try:
-        # Get Configuration Settings
-        key = os.getenv('COG_SERVICE_KEY')
-        region = os.getenv('COG_SERVICE_REGION')
-        endpoint = os.getenv('COG_SERVICE_ENDPOINT')
-    except ValueError as ex:
-        st.exception(ex)
-
-    # Add your key and endpoint
-    # key = key
-    # endpoint = endpoint
-
-    # location, also known as region.
-    # required if you're using a multi-service or regional (not global)
-    # resource. It can be found in the Azure portal
-    #  on the Keys and Endpoint page.
-    # location = region
-
-    path = '/translate'
-    constructed_url = endpoint + path
+def call_endpoint(url, language, text, key, region):
+    """ Call Azure Endpoint """
 
     params = {
         'api-version': '3.0',
@@ -92,10 +69,9 @@ def translate_text(text, language, debug):
     }]
 
     try:
-        request = requests.post(constructed_url, params=params,
+        request = requests.post(url, params=params,
                                 headers=headers, json=body,
                                 verify=False, timeout=10)
-        response = request.json()
     except requests.exceptions.Timeout:
         st.error("The request timed out.")
     except requests.exceptions.ConnectionError:
@@ -105,6 +81,25 @@ def translate_text(text, language, debug):
     except requests.exceptions.RequestException as err:
         st.error("Something went wrong:", err)
 
+    return request.json()
+
+
+def translate_text(text, language, debug):
+    """ Translate using Cognitive Services Translator"""
+
+    try:
+        # Get Configuration Settings
+        key = os.getenv('COG_SERVICE_KEY')
+        region = os.getenv('COG_SERVICE_REGION')
+        endpoint = os.getenv('COG_SERVICE_ENDPOINT')
+    except ValueError as ex:
+        st.exception(ex)
+
+    path = '/translate'
+    constructed_url = endpoint + path
+
+    response = call_endpoint(url=constructed_url, text=text, key=key,
+                             region=region, language=language)
     if debug:
         st.markdown(json.dumps(response, sort_keys=True,
                                ensure_ascii=False, indent=4,
@@ -151,6 +146,7 @@ if page == "Streamlit":
 if page == "Pre-Trained ML Model":
     st.markdown("Titanic survival ML model")
 
+    PrepProcesor()
     model = joblib.load('xgbpipe.joblib')
     # st.title('Did they survive? :ship:')
     # PassengerId,Pclass,Name,Sex,Age,SibSp,Parch,Ticket,Fare,Cabin,Embarked

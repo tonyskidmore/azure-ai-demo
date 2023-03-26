@@ -50,7 +50,7 @@ jobs:
           cache: 'pip' # caching pip dependencies
 
       - name: Install Python packages
-        run: pip install -r requirements.txt
+        run: pip install -r src/app/requirements.txt
 
       - name: Setup TFLint
         uses: terraform-linters/setup-tflint@v2

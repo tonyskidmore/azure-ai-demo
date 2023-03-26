@@ -7,10 +7,10 @@ WORKDIR /app
 
 RUN echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes
 
-RUN apt-get update && apt-get --no-install-recommends install -y \
-    build-essential==12.9 \
-    curl==7.74.0 \
-    ca-certificates==20210119 \
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    build-essential=12.9 \
+    curl=7.74.0-1.3+deb11u7 \
+    ca-certificates=20210119 \
     && rm -rf /var/lib/apt/lists/*
 
 COPY app /app
