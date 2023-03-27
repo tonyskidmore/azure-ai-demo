@@ -1,8 +1,3 @@
-data "azurerm_virtual_network" "bootstrap" {
-  vnet_name           = "vnet-azure-ai-demo"
-  resource_group_name = "rg-azure-ai-demo-bootstrap"
-}
-
 resource "azurerm_key_vault" "application" {
   name                       = "kv${var.key_vault_name}${random_string.build_index.result}"
   resource_group_name        = data.azurerm_resource_group.ai-demo.name
