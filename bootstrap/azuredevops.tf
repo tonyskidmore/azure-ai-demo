@@ -39,7 +39,8 @@ resource "azuredevops_build_definition" "build_definition" {
   repository {
     repo_type   = "TfsGit"
     repo_id     = azuredevops_git_repository.repository[each.value.repo_ref].id
-    branch_name = "main"
+    # branch_name = "main"
+    branch_name = each.value.path.branch_name
     yml_path    = each.value.yml_path
   }
 
