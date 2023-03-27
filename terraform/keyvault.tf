@@ -22,8 +22,7 @@ resource "azurerm_key_vault" "application" {
 
   depends_on = [
     azurerm_private_dns_zone.kv,
-    azurerm_private_dns_zone_virtual_network_link.kv,
-    azurerm_private_endpoint.kv
+    azurerm_private_dns_zone_virtual_network_link.kv
   ]
 
   tags = var.tags
