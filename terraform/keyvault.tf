@@ -13,7 +13,11 @@ resource "azurerm_key_vault" "application" {
   network_acls {
     default_action = "Deny"
     bypass         = "AzureServices"
-    # virtual_network_subnet_ids = data.azurerm_virtual_network.bootstrap.
+    virtual_network_subnet_ids = [
+      data.azurerm_subnet.private_endpoints.id,
+      data.azurerm_subnet.vnet_integration.id,
+      data.azurerm_subnet.ado_agents.id
+    ]
   }
 
   tags = var.tags
