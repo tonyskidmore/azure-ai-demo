@@ -95,6 +95,15 @@ resource "azurerm_private_endpoint" "kv" {
   tags = var.tags
 }
 
+resource "time_sleep" "wait_for_dns" {
+  create_duration = "30s"
+  depends_on      = [
+    azurerm_private_endpoint.kv,
+    azurerm_key_vault_access_policy.sp,
+    azurerm_private_dns_zone_virtual_network_link.kv
+  ]
+}
+
 resource "azurerm_key_vault_secret" "openai" {
   name            = "openai-api-key"
   value           = var.openai_api_key
@@ -103,9 +112,7 @@ resource "azurerm_key_vault_secret" "openai" {
   content_type    = "text/plain"
 
   depends_on = [
-    azurerm_private_endpoint.kv,
-    azurerm_key_vault_access_policy.sp,
-    azurerm_private_dns_zone_virtual_network_link.kv
+    time_sleep.wait_for_dns
   ]
 }
 
@@ -117,8 +124,6 @@ resource "azurerm_key_vault_secret" "cogkey" {
   content_type    = "text/plain"
 
   depends_on = [
-    azurerm_private_endpoint.kv,
-    azurerm_key_vault_access_policy.sp,
-    azurerm_private_dns_zone_virtual_network_link.kv
+    time_sleep.wait_for_dns
   ]
 }

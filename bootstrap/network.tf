@@ -26,11 +26,11 @@ module "network" {
     ]
   }
 
-  subnet_service_endpoints = {
-    "snet-azure-ai-demo-ado-agents"       = [ "Microsoft.KeyVault" ],
-    "snet-azure-ai-demo-private-endpoint" = [ "Microsoft.KeyVault" ],
-    "snet-azure-ai-demo-vnet-int"         = [ "Microsoft.KeyVault" ]
-  }
+  # subnet_service_endpoints = {
+  #   "snet-azure-ai-demo-ado-agents"       = [ "Microsoft.KeyVault" ],
+  #   "snet-azure-ai-demo-private-endpoint" = [ "Microsoft.KeyVault" ],
+  #   "snet-azure-ai-demo-vnet-int"         = [ "Microsoft.KeyVault" ]
+  # }
 
   tags         = var.tags
   use_for_each = true
