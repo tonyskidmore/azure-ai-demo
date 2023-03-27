@@ -13,11 +13,11 @@ resource "azurerm_key_vault" "application" {
     default_action = "Deny"
     ip_rules       = []
     bypass         = "AzureServices"
-    virtual_network_subnet_ids = [
-      data.azurerm_subnet.private_endpoints.id,
-      data.azurerm_subnet.vnet_integration.id,
-      data.azurerm_subnet.ado_agents.id
-    ]
+    # virtual_network_subnet_ids = [
+    #   data.azurerm_subnet.private_endpoints.id,
+    #   data.azurerm_subnet.vnet_integration.id,
+    #   data.azurerm_subnet.ado_agents.id
+    # ]
   }
 
   timeouts {
@@ -96,7 +96,7 @@ resource "azurerm_private_endpoint" "kv" {
 }
 
 resource "time_sleep" "wait_for_dns" {
-  create_duration = "30s"
+  create_duration = "120s"
   depends_on      = [
     azurerm_private_endpoint.kv,
     azurerm_key_vault_access_policy.sp,
