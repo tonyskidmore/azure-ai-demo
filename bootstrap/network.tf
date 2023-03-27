@@ -22,39 +22,14 @@ module "network" {
             "Microsoft.Network/virtualNetworks/subnets/action",
           ]
         }
-      },
-      {
-        name = "delegation"
-        service_delegation = {
-          name = "Microsoft.KeyVault"
-          actions = [
-            "Microsoft.Network/virtualNetworks/subnets/action",
-          ]
-        }
       }
     ]
-    snet-azure-ai-demo-ado-agents = [
-      {
-        name = "delegation"
-        service_delegation = {
-          name = "Microsoft.KeyVault"
-          actions = [
-            "Microsoft.Network/virtualNetworks/subnets/action",
-          ]
-        }
-      }
-    ],
-    snet-azure-ai-demo-private-endpoint = [
-      {
-        name = "delegation"
-        service_delegation = {
-          name = "Microsoft.KeyVault"
-          actions = [
-            "Microsoft.Network/virtualNetworks/subnets/action",
-          ]
-        }
-      }
-    ]
+  }
+
+  subnet_service_endpoints = {
+    "snet-azure-ai-demo-ado-agents"       = [ "Microsoft.KeyVault" ],
+    "snet-azure-ai-demo-private-endpoint" = [ "Microsoft.KeyVault" ],
+    "snet-azure-ai-demo-vnet-int"         = [ "Microsoft.KeyVault" ]
   }
 
   tags         = var.tags
