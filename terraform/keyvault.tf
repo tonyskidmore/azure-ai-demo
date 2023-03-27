@@ -12,6 +12,7 @@ resource "azurerm_key_vault" "application" {
 
   network_acls {
     default_action = "Deny"
+    ip_rules       = []
     bypass         = "AzureServices"
     virtual_network_subnet_ids = [
       data.azurerm_subnet.private_endpoints.id,
@@ -20,10 +21,12 @@ resource "azurerm_key_vault" "application" {
     ]
   }
 
-  depends_on = [
-    azurerm_private_dns_zone.kv,
-    azurerm_private_dns_zone_virtual_network_link.kv
-  ]
+  timeouts {
+    create = "1h"
+    read   = "15m"
+    update = "1h"
+    delete = "1h"
+  }
 
   tags = var.tags
 }
