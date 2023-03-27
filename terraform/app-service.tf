@@ -15,7 +15,7 @@ resource "azurerm_linux_web_app" "application" {
   location                   = var.location
   service_plan_id            = azurerm_service_plan.application.id
   https_only                 = true
-  client_certificate_enabled = "Optional"
+  client_certificate_mode    = "Optional"
 
   tags = var.tags
 
