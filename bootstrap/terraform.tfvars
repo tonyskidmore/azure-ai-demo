@@ -4,16 +4,18 @@ ado_pool_desired_idle = 0
 build_definitions = {
 
   "pipeline1" = {
-    name     = "terraform",
-    path     = "\\azure-ai-demo",
-    repo_ref = "repo1",
-    yml_path = "bootstrap/pipelines/terraform.yml"
+    name        = "terraform",
+    path        = "\\azure-ai-demo",
+    repo_ref    = "repo1",
+    branch_name = "refs/heads/new-pipelines",
+    yml_path    = "bootstrap/pipelines/terraform.yml"
   }
   "pipeline2" = {
-    name     = "application",
-    path     = "\\azure-ai-demo",
-    repo_ref = "repo1",
-    yml_path = "bootstrap/pipelines/application.yml"
+    name        = "application",
+    path        = "\\azure-ai-demo",
+    branch_name = "refs/heads/new-pipelines",
+    repo_ref    = "repo1",
+    yml_path    = "bootstrap/pipelines/application.yml"
   }
 }
 
@@ -21,7 +23,7 @@ git_repos = {
   "repo1" = {
     name = "ai-demo-src",
     # default_branch = "refs/heads/main",
-    default_branch = "refs/heads/pipelines",
+    default_branch = "refs/heads/new-pipelines",
     initialization = {
       init_type   = "Import",
       source_type = "Git",
