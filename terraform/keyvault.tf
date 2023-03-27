@@ -1,11 +1,10 @@
 resource "azurerm_key_vault" "application" {
-  name                       = "kv${var.key_vault_name}${random_string.build_index.result}"
-  resource_group_name        = data.azurerm_resource_group.ai-demo.name
-  location                   = var.location
-  tenant_id                  = data.azurerm_client_config.current.tenant_id
-  soft_delete_retention_days = 7
-  sku_name                   = "standard"
-  # Status=403 Code="Forbidden" Message="Connection is not an approved private link and caller was ignored because bypass is not set to 'AzureServices' and PublicNetworkAccess is set to 'Disabled'.
+  name                          = "kv${var.key_vault_name}${random_string.build_index.result}"
+  resource_group_name           = data.azurerm_resource_group.ai-demo.name
+  location                      = data.azurerm_resource_group.ai-demo.location
+  tenant_id                     = data.azurerm_client_config.current.tenant_id
+  soft_delete_retention_days    = 7
+  sku_name                      = "standard"
   public_network_access_enabled = false
 
   purge_protection_enabled = true
@@ -105,7 +104,8 @@ resource "azurerm_key_vault_secret" "openai" {
 
   depends_on = [
     azurerm_private_endpoint.kv,
-    azurerm_key_vault_access_policy.sp
+    azurerm_key_vault_access_policy.sp,
+    azurerm_private_dns_zone_virtual_network_link.kv
   ]
 }
 
@@ -118,6 +118,7 @@ resource "azurerm_key_vault_secret" "cogkey" {
 
   depends_on = [
     azurerm_private_endpoint.kv,
-    azurerm_key_vault_access_policy.sp
+    azurerm_key_vault_access_policy.sp,
+    azurerm_private_dns_zone_virtual_network_link.kv
   ]
 }
