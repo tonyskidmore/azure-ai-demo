@@ -14,9 +14,16 @@ resource "azurerm_cognitive_account" "translate" {
 
   # https://learn.microsoft.com/en-us/azure/cognitive-services/cognitive-services-virtual-networks?tabs=portal
 
-  #   network_acls {
-  #     default_action = "Allow"
-  #   }
+  # network_acls {
+  #   default_action = "Deny"
+  #   ip_rules       = []
+  #   virtual_network_rules = [
+  #     {
+  #       subnet_id = data.azurerm_subnet.vnet_integration.id
+  #     }
+  #   ]
+  # }
+
 }
 
 resource "azurerm_private_dns_zone" "cs" {
