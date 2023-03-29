@@ -62,6 +62,7 @@ resource "azurerm_linux_web_app" "application" {
     COG_SERVICE_ENDPOINT = "https://api.cognitive.microsofttranslator.com"
     # https://github.com/hashicorp/terraform-provider-azurerm/issues/19096
     WEBSITE_PULL_IMAGE_OVER_VNET = true
+    WEBSITE_DNS_SERVER           = "168.63.129.16"
   }
 
   lifecycle {

@@ -14,13 +14,13 @@ resource "azurerm_cognitive_account" "translate" {
 
   # https://learn.microsoft.com/en-us/azure/cognitive-services/cognitive-services-virtual-networks?tabs=portal
   # https://github.com/hashicorp/terraform-provider-azurerm/blob/d3457931feca7bf3abdda344f50c86f7934b1bbd/internal/services/cognitive/cognitive_account_resource_test.go#L889-L906
-  network_acls {
-    default_action = "Deny"
-    ip_rules       = []
-    virtual_network_rules {
-      subnet_id = data.azurerm_subnet.vnet_integration.id
-    }
-  }
+  # network_acls {
+  #   default_action = "Deny"
+  #   ip_rules       = []
+  #   virtual_network_rules {
+  #     subnet_id = data.azurerm_subnet.vnet_integration.id
+  #   }
+  # }
 
   depends_on = [
     time_sleep.wait_for_dns

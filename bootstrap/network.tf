@@ -25,9 +25,11 @@ module "network" {
     ]
   }
 
-  subnet_service_endpoints = {
-    "snet-azure-ai-demo-vnet-int"         = [ "Microsoft.CognitiveServices" ]
-  }
+  # https://learn.microsoft.com/en-us/azure/app-service/overview-vnet-integration
+  # The integration subnet can't have service endpoint policies enabled
+  # subnet_service_endpoints = {
+  #   "snet-azure-ai-demo-vnet-int"         = [ "Microsoft.CognitiveServices" ]
+  # }
 
   tags         = var.tags
   use_for_each = true
