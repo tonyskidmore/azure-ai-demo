@@ -5,7 +5,7 @@ ARG USER_UID=1000
 
 COPY entrypoint.sh ./
 COPY app /app
-COPY ssd_config /etc/ssh
+COPY sshd_config /etc/ssh
 
 RUN echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes
 
