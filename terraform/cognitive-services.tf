@@ -22,9 +22,9 @@ resource "azurerm_cognitive_account" "translate" {
   #   }
   # }
 
-  depends_on = [
-    time_sleep.wait_for_dns
-  ]
+  # depends_on = [
+  #   time_sleep.wait_for_dns
+  # ]
 
 }
 
