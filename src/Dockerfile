@@ -5,6 +5,7 @@ ARG USER_UID=1000
 
 COPY entrypoint.sh ./
 COPY app /app
+COPY ssd_config /etc/ssh
 
 RUN echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes
 
@@ -23,8 +24,6 @@ WORKDIR /app
 RUN pip3 install pip==23.0.1 --no-cache-dir  && \
     pip3 install setuptools==52.0.0 --no-cache-dir --upgrade && \
     pip3 install -r requirements.txt --no-cache-dir
-
-COPY ssd_config /etc/ssh
 
 EXPOSE 8501 2222
 
