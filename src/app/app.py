@@ -153,7 +153,7 @@ if page == "Pre-Trained ML Model":
     # passengerid = st.text_input("Input Passenger ID", '123456')
     PASSENGER_ID = "123456"
     pclass = st.selectbox('Ticket class (1 = 1st, 2 = 2nd, 3 = 3rd)',
-                          [1, 2, 3])
+                        [1, 2, 3])
     # name  = st.text_input("Input Passenger Name", 'John Smith')
     NAME = "Not Applicable"
     sex = st.selectbox('Sex', ['female', 'male'])
