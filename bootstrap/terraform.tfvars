@@ -7,13 +7,13 @@ build_definitions = {
     name        = "terraform",
     path        = "\\azure-ai-demo",
     repo_ref    = "repo1",
-    branch_name = "refs/heads/new-pipelines",
+    branch_name = "refs/heads/main",
     yml_path    = "bootstrap/pipelines/terraform.yml"
   }
   "pipeline2" = {
     name        = "application",
     path        = "\\azure-ai-demo",
-    branch_name = "refs/heads/new-pipelines",
+    branch_name = "refs/heads/main",
     repo_ref    = "repo1",
     yml_path    = "bootstrap/pipelines/application.yml"
   }
@@ -22,8 +22,7 @@ build_definitions = {
 git_repos = {
   "repo1" = {
     name = "ai-demo-src",
-    # default_branch = "refs/heads/main",
-    default_branch = "refs/heads/new-pipelines",
+    default_branch = "refs/heads/main",
     initialization = {
       init_type   = "Import",
       source_type = "Git",
