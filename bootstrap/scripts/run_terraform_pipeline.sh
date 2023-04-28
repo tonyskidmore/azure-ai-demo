@@ -1,28 +1,33 @@
 #!/bin/bash
 
+# export BRANCH_NAME to the desired feature branch if needed
+# or BRANCH_NAME will default to current ref
+BRANCH_NAME="${BRANCH_NAME:-$(git rev-parse --symbolic-full-name HEAD)}"
+printf "BRANCH_NAME: %s\n" "$BRANCH_NAME"
+
 create_post_data()
 {
   cat <<EOF
 {
     "resources": {
-        "repositories": {
-            "self": {
-                "refName": "refs/heads/main"
-            }
+      "repositories": {
+        "self": {
+          "refName":"$BRANCH_NAME"
         }
-    },
-    "variables": {
-        "HELLO_WORLD": {
-            "isSecret": false,
-            "value": "HelloWorldValue"
-        }
+      }
     }
 }
 EOF
 }
 
-# data="$(create_post_data)"
-data="{}"
+# define data depending on whether we are using the main or featrure branch
+if [[ "$BRANCH_NAME" == "refs/heads/main" ]]
+then
+  data="{}"
+else
+  data="$(create_post_data)"
+fi
+
 
 # POST https://dev.azure.com/{organization}/{project}/_apis/pipelines/{pipelineId}/runs?api-version=7.0
 PROJECT=$(terraform output -raw ado_project_name)

@@ -10,11 +10,15 @@ resources:
   - pipeline: application
     source: terraform
     trigger: true
-  repositories:
-   - repository: self
-   - repository: templates
-     type: git
-     name: pipelines
+  # repositories:
+  # - repository: ai-demo-src
+  #   type: git
+  #   name: ai-demo-src
+  #   ref: main
+  #   trigger:
+  #     branches:
+  #       include:
+  #       - main
 
 variables:
 - group: build
@@ -38,7 +42,7 @@ stages:
 
       - checkout: self
 
-      - checkout: git://$(project)/ai-demo-src
+      - checkout: git://$(project)/pipelines
 
       - script: |
           env

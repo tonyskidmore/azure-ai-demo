@@ -10,11 +10,12 @@ resource "azurerm_service_plan" "application" {
 }
 
 resource "azurerm_linux_web_app" "application" {
-  name                = "${var.app_service_name}${random_string.build_index.result}"
-  resource_group_name = data.azurerm_resource_group.ai-demo.name
-  location            = var.location
-  service_plan_id     = azurerm_service_plan.application.id
-  https_only          = true
+  name                       = "${var.app_service_name}${random_string.build_index.result}"
+  resource_group_name        = data.azurerm_resource_group.ai-demo.name
+  location                   = var.location
+  service_plan_id            = azurerm_service_plan.application.id
+  https_only                 = true
+  client_certificate_mode    = "Optional"
 
   tags = var.tags
 
@@ -36,6 +37,8 @@ resource "azurerm_linux_web_app" "application" {
   }
 
   logs {
+    failed_request_tracing  = true
+    detailed_error_messages = true
     application_logs {
       file_system_level = "Error"
     }
@@ -59,6 +62,15 @@ resource "azurerm_linux_web_app" "application" {
     COG_SERVICE_ENDPOINT = "https://api.cognitive.microsofttranslator.com"
     # https://github.com/hashicorp/terraform-provider-azurerm/issues/19096
     WEBSITE_PULL_IMAGE_OVER_VNET = true
+    WEBSITE_DNS_SERVER           = "168.63.129.16"
+  }
+
+  lifecycle {
+    ignore_changes = [
+      # https://registry.terraform.io/providers/hashicorp/azurerm/latest/docs/resources/linux_web_app#virtual_network_subnet_id
+      virtual_network_subnet_id,
+      site_config[0].application_stack
+    ]
   }
 }
 

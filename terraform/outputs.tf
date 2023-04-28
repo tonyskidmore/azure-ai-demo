@@ -14,3 +14,7 @@ output "translator" {
   value     = azurerm_cognitive_account.translate
   sensitive = true
 }
+
+output "vnet_subnets" {
+  value = data.azurerm_virtual_network.bootstrap
+}

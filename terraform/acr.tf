@@ -5,11 +5,20 @@ resource "azurerm_container_registry" "acr" {
   sku                 = "Premium"
   admin_enabled       = var.acr_admin_enabled
   # enabling for demo puproses
-  public_network_access_enabled = true
+  public_network_access_enabled = false
 
   identity {
     type         = var.acr_identity_type
     identity_ids = var.acr_identity_ids
+  }
+
+  trust_policy {
+    enabled = true
+  }
+
+  retention_policy {
+    days    = 7
+    enabled = true
   }
 
   tags = var.tags

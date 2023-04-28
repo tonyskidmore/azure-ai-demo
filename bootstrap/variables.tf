@@ -91,10 +91,11 @@ variable "azurerm_subscription_name" {
 
 variable "build_definitions" {
   type = map(object({
-    name     = string
-    path     = string
-    repo_ref = string
-    yml_path = string
+    name        = string
+    branch_name = string
+    path        = string
+    repo_ref    = string
+    yml_path    = string
   }))
   description = "Pipelines to create"
 }
@@ -102,7 +103,7 @@ variable "build_definitions" {
 variable "git_repos" {
   type = map(object({
     name = string
-    # default_branch = string
+    default_branch = string
     initialization = map(string)
   }))
   description = "Repos to create"
@@ -113,10 +114,10 @@ variable "location" {
   description = "Azure region"
 }
 
-variable "nsg_name" {
-  type        = string
-  description = "Name of the Network Security Group"
-}
+# variable "nsg_name" {
+#   type        = string
+#   description = "Name of the Network Security Group"
+# }
 
 variable "tags" {
   type        = map(string)

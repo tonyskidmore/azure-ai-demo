@@ -1,18 +1,30 @@
 resource "azurerm_key_vault" "application" {
-  name                       = "kv${var.key_vault_name}${random_string.build_index.result}"
-  resource_group_name        = data.azurerm_resource_group.ai-demo.name
-  location                   = var.location
-  tenant_id                  = data.azurerm_client_config.current.tenant_id
-  soft_delete_retention_days = 7
-  sku_name                   = "standard"
-  # Status=403 Code="Forbidden" Message="Connection is not an approved private link and caller was ignored because bypass is not set to 'AzureServices' and PublicNetworkAccess is set to 'Disabled'.
-  public_network_access_enabled = true
+  name                          = "kv${var.key_vault_name}${random_string.build_index.result}"
+  resource_group_name           = data.azurerm_resource_group.ai-demo.name
+  location                      = data.azurerm_resource_group.ai-demo.location
+  tenant_id                     = data.azurerm_client_config.current.tenant_id
+  soft_delete_retention_days    = 7
+  sku_name                      = "standard"
+  public_network_access_enabled = false
+
+  purge_protection_enabled = true
 
   network_acls {
-    default_action = "Allow"
+    default_action = "Deny"
+    ip_rules       = []
     bypass         = "AzureServices"
-    # virtual_network_subnet_ids = [var.subnet_id]
-    # ip_rules                   = [var.myip]
+    # virtual_network_subnet_ids = [
+    #   data.azurerm_subnet.private_endpoints.id,
+    #   data.azurerm_subnet.vnet_integration.id,
+    #   data.azurerm_subnet.ado_agents.id
+    # ]
+  }
+
+  timeouts {
+    create = "1h"
+    read   = "15m"
+    update = "1h"
+    delete = "1h"
   }
 
   tags = var.tags
@@ -83,24 +95,35 @@ resource "azurerm_private_endpoint" "kv" {
   tags = var.tags
 }
 
+resource "time_sleep" "wait_for_dns" {
+  create_duration = "120s"
+  depends_on      = [
+    azurerm_private_endpoint.kv,
+    azurerm_key_vault_access_policy.sp,
+    azurerm_private_dns_zone_virtual_network_link.kv
+  ]
+}
+
 resource "azurerm_key_vault_secret" "openai" {
-  name         = "openai-api-key"
-  value        = var.openai_api_key
-  key_vault_id = azurerm_key_vault.application.id
+  name            = "openai-api-key"
+  value           = var.openai_api_key
+  key_vault_id    = azurerm_key_vault.application.id
+  expiration_date = local.secret_expiry_date
+  content_type    = "text/plain"
 
   depends_on = [
-    azurerm_private_endpoint.kv,
-    azurerm_key_vault_access_policy.sp
+    time_sleep.wait_for_dns
   ]
 }
 
 resource "azurerm_key_vault_secret" "cogkey" {
-  name         = "cog-service-key"
-  value        = azurerm_cognitive_account.translate.primary_access_key
-  key_vault_id = azurerm_key_vault.application.id
+  name            = "cog-service-key"
+  value           = azurerm_cognitive_account.translate.primary_access_key
+  key_vault_id    = azurerm_key_vault.application.id
+  expiration_date = local.secret_expiry_date
+  content_type    = "text/plain"
 
   depends_on = [
-    azurerm_private_endpoint.kv,
-    azurerm_key_vault_access_policy.sp
+    time_sleep.wait_for_dns
   ]
 }

@@ -1,25 +1,27 @@
 ado_pool_name         = "vmss-bootstrap-pool"
-ado_pool_desired_idle = 1
+ado_pool_desired_idle = 0
 
 build_definitions = {
 
   "pipeline1" = {
-    name     = "terraform",
-    path     = "\\azure-ai-demo",
-    repo_ref = "repo2",
-    yml_path = "azure-ai-demo/terraform.yml"
+    name        = "terraform",
+    path        = "\\azure-ai-demo",
+    repo_ref    = "repo1",
+    branch_name = "refs/heads/main",
+    yml_path    = "bootstrap/pipelines/terraform.yml"
   }
   "pipeline2" = {
-    name     = "application",
-    path     = "\\azure-ai-demo",
-    repo_ref = "repo2",
-    yml_path = "azure-ai-demo/application.yml"
+    name        = "application",
+    path        = "\\azure-ai-demo",
+    branch_name = "refs/heads/main",
+    repo_ref    = "repo1",
+    yml_path    = "bootstrap/pipelines/application.yml"
   }
 }
 
 git_repos = {
   "repo1" = {
-    name           = "ai-demo-src",
+    name = "ai-demo-src",
     default_branch = "refs/heads/main",
     initialization = {
       init_type   = "Import",
@@ -42,7 +44,7 @@ location                 = "uksouth"
 nsg_name                 = "nsg-azure-ai-demo"
 resource_group_name      = "rg-azure-ai-demo-bootstrap"
 demo_resource_group_name = "rg-azure-ai-demo"
-vmss_name                = "vmss-azure-ai-demo-bootstrap"
+vmss_name                = "vmss-azure-ai-demo-bootstrap-001"
 vmss_admin_password      = "Sup3rS3cr3tP@55w0rd!"
 vmss_vnet_name           = "vnet-azure-ai-demo"
 vnet_address_space       = ["192.168.0.0/16"]
@@ -57,4 +59,3 @@ subnet_prefixes = [
   "192.168.0.16/28",
   "192.168.0.32/27"
 ]
-

@@ -64,6 +64,11 @@ variable "subnet_name_vnet_integration" {
   description = "Name of the vnet integration subnet"
 }
 
+variable "subnet_name_ado_agents" {
+  type        = string
+  description = "Name of the ADO agents subnet"
+}
+
 variable "app_service_plan_name" {
   type        = string
   description = "Name of the app service plan"
@@ -76,11 +81,11 @@ variable "app_service_name" {
   default     = "azureaidemo"
 }
 
-variable "application_name" {
-  type        = string
-  description = "Name of the private endpoint subnet"
-  default     = "azureaidemo"
-}
+# variable "application_name" {
+#   type        = string
+#   description = "Name of the private endpoint subnet"
+#   default     = "azureaidemo"
+# }
 
 variable "cognitive_account_name" {
   type        = string

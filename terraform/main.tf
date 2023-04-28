@@ -30,3 +30,9 @@ data "azurerm_subnet" "vnet_integration" {
   virtual_network_name = data.azurerm_virtual_network.bootstrap.name
   resource_group_name  = var.bootstrap_resource_group_name
 }
+
+data "azurerm_subnet" "ado_agents" {
+  name                 = var.subnet_name_ado_agents
+  virtual_network_name = data.azurerm_virtual_network.bootstrap.name
+  resource_group_name  = var.bootstrap_resource_group_name
+}

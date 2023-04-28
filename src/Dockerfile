@@ -1,23 +1,39 @@
 FROM python:3.9-slim
 
-WORKDIR /app
+ARG USERNAME=app
+ARG USER_UID=1000
 
-RUN apt-get update && apt-get install -y \
-    build-essential \
-    curl \
-    software-properties-common \
-    ca-certificates \
+COPY entrypoint.sh ./
+COPY app /app
+COPY sshd_config /etc/ssh
+
+RUN echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes
+
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    dialog \
+    openssh-server \
+    build-essential=12.9 \
+    curl=7.74.0-1.3+deb11u7 \
+    ca-certificates=20210119 \
+    && echo "root:Docker!" | chpasswd \
+    && chmod u+x ./entrypoint.sh \
     && rm -rf /var/lib/apt/lists/*
 
-COPY app /app
+WORKDIR /app
 
-RUN pip3 install pip --upgrade && \
-    pip3 install setuptools --upgrade && \
-    pip3 install -r requirements.txt
+RUN pip3 install pip==23.0.1 --no-cache-dir  && \
+    pip3 install setuptools==52.0.0 --no-cache-dir --upgrade && \
+    pip3 install -r requirements.txt --no-cache-dir
 
-EXPOSE 8501
+EXPOSE 8501 2222
 
 HEALTHCHECK CMD curl --fail http://localhost:8501/_stcore/health
 
-ENTRYPOINT ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]
+RUN useradd --uid "$USER_UID" -ms /bin/bash "$USERNAME" && \
+    chown -R "${USERNAME}:${USERNAME}" "/home/${USERNAME}"
 
+USER "$USERNAME"
+
+ENTRYPOINT [ "./entrypoint.sh" ]
+
+# ENTRYPOINT ["streamlit", "run", "app.py", "--server.port=8501", "--server.address=0.0.0.0"]

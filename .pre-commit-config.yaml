@@ -1,0 +1,91 @@
+---
+
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.4.0
+    hooks:
+      - id: check-json
+        exclude: devcontainer.json
+      - id: check-yaml
+      - id: check-merge-conflict
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+      - id: detect-private-key
+
+  - repo: https://github.com/bridgecrewio/checkov.git
+    rev: '2.3.115'
+    hooks:
+      - id: checkov
+        verbose: false
+        args: [ ]
+
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+  # Get the latest from:
+  # https://github.com/antonbabenko/pre-commit-terraform/releases
+    rev: v1.77.1
+    hooks:
+      - id: terraform_fmt
+      # - id: terraform_validate
+      # - id: terraform_tfsec
+      - id: terraform_tflint
+      # - id: terrascan
+      #   args:
+      #     - --config-path terrascan.yml
+      #     - --args=--non-recursive
+      #     - --args=--skip-rules="AC_AZURE_0356" # avoids nsg test for simple admin_password example
+      #     - --args=--skip-rules="AC_AZURE_0389" # skip "Ensure that Azure Resource Group has resource lock enabled"
+      #     - --args=--policy-type=azure
+      #     - --args=--verbose
+
+  -   repo: https://github.com/koalaman/shellcheck-precommit
+      rev: v0.8.0
+      hooks:
+       -   id: shellcheck
+
+  - repo: local
+    hooks:
+      - id: pylint
+        name: pylint
+        entry: pylint
+        language: system
+        types: [python]
+        args:
+          [
+            # "-rn", # Only display messages
+            # "-sn", # Don't display the score
+          ]
+
+  -   repo: https://github.com/PyCQA/flake8
+      rev: 4.0.1
+      hooks:
+      - id: flake8
+
+    # match with .devcontainer/init.sh - $hadolint_version
+  - repo: https://github.com/hadolint/hadolint
+    rev: v2.12.0
+    hooks:
+      - id: hadolint
+
+  # -   repo: https://github.com/PyCQA/isort
+  #     rev: 5.10.1
+  #     hooks:
+  #     -   id: isort
+
+  # - repo: https://github.com/tenable/terrascan
+  #   rev: v1.18.0
+  #   hooks:
+  #     - id: terraform-pre-commit
+  #       args: [ "-c terrascan.yml -i terraform -i terraform" ]
+          # - --config-path terrascan_config.toml
+          # - --args=--skip-rules="AC_AZURE_0356" # avoids nsg test for simple admin_password example
+          # - --args=--skip-rules="AC_AZURE_0389" # skip "Ensure that Azure Resource Group has resource lock enabled"
+          # - --args=--policy-type=azure
+          # "-i terraform"
+          # "-c terrascan.yml"
+
+
+  # - repo: https://github.com/terraform-docs/terraform-docs
+  #   rev: "v0.16.0"
+  #   hooks:
+  #     - id: terraform-docs-go
+  #       args: ["markdown", "table", "--output-file", "README.md", "./"]

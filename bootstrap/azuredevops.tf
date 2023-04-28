@@ -13,7 +13,7 @@ resource "azuredevops_git_repository" "repository" {
   for_each       = var.git_repos
   project_id     = azuredevops_project.project.id
   name           = each.value.name
-  default_branch = "main"
+  default_branch = each.value.default_branch
   initialization {
     init_type   = each.value.initialization.init_type
     source_type = each.value.initialization.source_type
@@ -21,6 +21,9 @@ resource "azuredevops_git_repository" "repository" {
   }
 }
 
+# error workaround possibilities
+# https://stackoverflow.com/questions/70049758/terraform-for-each-one-by-one
+# https://pet2cattle.com/2021/06/time-sleep-between-resources
 resource "azuredevops_build_definition" "build_definition" {
   for_each = var.build_definitions
 
@@ -36,7 +39,8 @@ resource "azuredevops_build_definition" "build_definition" {
   repository {
     repo_type   = "TfsGit"
     repo_id     = azuredevops_git_repository.repository[each.value.repo_ref].id
-    branch_name = "main"
+    # branch_name = "main"
+    branch_name = each.value.branch_name
     yml_path    = each.value.yml_path
   }
 
@@ -45,6 +49,7 @@ resource "azuredevops_build_definition" "build_definition" {
   ]
 }
 
+# https://registry.terraform.io/providers/hashicorp/time/latest/docs/resources/sleep
 
 # add permissions to repo for pipeline
 resource "null_resource" "build_definition_repo_perms" {
@@ -71,7 +76,7 @@ curl \
   --header "Content-Type: application/json" \
   --request PATCH \
   --data "$payload" \
-  "$AZDO_ORG_SERVICE_URL/${var.ado_project_name}/_apis/pipelines/pipelinePermissions/repository/${azuredevops_project.project.id}.${azuredevops_git_repository.repository["repo1"].id}?api-version=7.0-preview.1" | jq .
+  "$AZDO_ORG_SERVICE_URL/${var.ado_project_name}/_apis/pipelines/pipelinePermissions/repository/${azuredevops_project.project.id}.${azuredevops_git_repository.repository["repo2"].id}?api-version=7.0-preview.1" | jq .
 EOF
   }
 }

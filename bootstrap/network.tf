@@ -8,7 +8,6 @@ module "network" {
   subnet_prefixes         = var.subnet_prefixes
   subnet_names            = var.subnet_names
 
-  # TODO: update to make dynamic
   subnet_enforce_private_link_endpoint_network_policies = {
     "snet-azure-ai-demo-private-endpoint" : true
   }
@@ -25,6 +24,10 @@ module "network" {
       }
     ]
   }
+
+  # subnet_service_endpoints = {
+  #   "snet-azure-ai-demo-private-endpoint"         = [ "Microsoft.CognitiveServices" ]
+  # }
 
   tags         = var.tags
   use_for_each = true

@@ -1,3 +1,4 @@
+# Build the app
 You can build the Streamlit container locally if you have Docker installed.
 If you want to test Azure Cognitive services and OpenAI ChatGBT you will need to first the required environment variables:
 
@@ -29,3 +30,8 @@ docker run \
 
 ````
 
+## Azure App Service SSH
+
+The app has SSH enabled for Azure App Service as per [Azure App Service -Enable SSH](https://learn.microsoft.com/en-us/azure/app-service/configure-custom-container?pivots=container-linux&tabs=debian#enable-ssh).  This is for debug and demonstration purposes.
+
+See [Open an SSH session to a Linux container in Azure App Service](https://learn.microsoft.com/en-us/azure/app-service/configure-linux-open-ssh-session) on how to leverage this feature.
