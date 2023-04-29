@@ -95,10 +95,10 @@ def translate_text(text, language, debug):
     except ValueError as ex:
         st.exception(ex)
 
-    path = '/translate'
-    constructed_url = endpoint + path
+    # path = '/translate'
+    # constructed_url = endpoint + path
 
-    response = call_endpoint(url=constructed_url, text=text, key=key,
+    response = call_endpoint(url=endpoint, text=text, key=key,
                              region=region, language=language)
     if debug:
         st.markdown(json.dumps(response, sort_keys=True,

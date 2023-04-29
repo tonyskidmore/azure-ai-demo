@@ -108,12 +108,13 @@ variable "cognitive_kind" {
 variable "cognitive_custom_subdomain" {
   type        = string
   description = "Azure Cognitive Services custom subdomain"
+  default     = "azure-ai-demo"
 }
 
 variable "cognitive_private_link" {
   type        = bool
   description = "Deploy Azure Cognitive Services as a private endpoint?"
-  default     = false
+  default     = true
 }
 
 variable "key_vault_name" {

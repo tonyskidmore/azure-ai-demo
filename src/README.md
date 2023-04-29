@@ -7,7 +7,7 @@ If you want to test Azure Cognitive services and OpenAI ChatGBT you will need to
 | COG_SERVICE_KEY           | One of the keys from an Azure Cognitive Services translator service |
 | COG_SERVICE_REGION        | The Azure region where the Translator service was deployed          |
 | COG_SERVICE_ENDPOINT      | The Translator HTTPS endpoint to query                              |
-| OPENAI_API_KEY            | Yours OpenAI REST API key                                            |
+| OPENAI_API_KEY            | Yours OpenAI REST API key                                           |
 
 _Note:_ You can build and run the container without the OpenAI and Cognitive Services values, but those pages just won't work.
 
@@ -24,11 +24,16 @@ docker run \
   -e COG_SERVICE_REGION="uksouth" \
   -e COG_SERVICE_ENDPOINT=https://api.cognitive.microsofttranslator.com \
   -p 8501:8501 \
+  -p 2222:2222 \
   --name streamlit-demo streamlit-demo
 
 # open http://localhost:8501 in your local browser
 
 ````
+
+_Note:_ If the Azure demo environment was built with the variable `cognitive_private_link` set to `true` (default)
+then you won't be able to access the Translator service as it will only be accessible on a private endpoint within
+the Azure environment.
 
 ## Azure App Service SSH
 
