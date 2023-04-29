@@ -114,6 +114,12 @@ resource "azurerm_key_vault_secret" "openai" {
   depends_on = [
     time_sleep.wait_for_dns
   ]
+
+  lifecycle {
+    ignore_changes = [
+      expiration_date
+    ]
+  }
 }
 
 resource "azurerm_key_vault_secret" "cogkey" {
@@ -126,4 +132,10 @@ resource "azurerm_key_vault_secret" "cogkey" {
   depends_on = [
     time_sleep.wait_for_dns
   ]
+
+  lifecycle {
+    ignore_changes = [
+      expiration_date
+    ]
+  }
 }
