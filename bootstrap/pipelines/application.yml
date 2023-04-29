@@ -7,18 +7,12 @@ trigger:
 
 resources:
   pipelines:
-  - pipeline: application
-    source: terraform
-    trigger: true
-  # repositories:
-  # - repository: ai-demo-src
-  #   type: git
-  #   name: ai-demo-src
-  #   ref: main
-  #   trigger:
-  #     branches:
-  #       include:
-  #       - main
+    - pipeline: terraform
+      source: terraform
+      branch: main
+      trigger:
+        branches:
+          - '*'
 
 variables:
 - group: build

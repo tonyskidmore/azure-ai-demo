@@ -59,7 +59,7 @@ resource "azurerm_linux_web_app" "application" {
     COG_SERVICE_KEY    = "@Microsoft.KeyVault(VaultName=${azurerm_key_vault.application.name};SecretName=cog-service-key)"
     COG_SERVICE_REGION = var.location
     # https://learn.microsoft.com/en-us/azure/cognitive-services/cognitive-services-virtual-networks
-    COG_SERVICE_ENDPOINT = "https://api.cognitive.microsofttranslator.com"
+    COG_SERVICE_ENDPOINT = local.cog_service_endpoint
     # https://github.com/hashicorp/terraform-provider-azurerm/issues/19096
     WEBSITE_PULL_IMAGE_OVER_VNET = true
     WEBSITE_DNS_SERVER           = "168.63.129.16"
