@@ -5,14 +5,14 @@ name: "application"
 trigger:
 - main
 
-resources:
-  pipelines:
-    - pipeline: terraform
-      source: terraform
-      branch: main
-      trigger:
-        branches:
-          - '*'
+# resources:
+#   pipelines:
+#     - pipeline: terraform
+#       source: terraform
+#       branch: main
+#       trigger:
+#         branches:
+#           - '*'
 
 variables:
 - group: build
