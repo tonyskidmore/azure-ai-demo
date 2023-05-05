@@ -55,7 +55,6 @@ stages:
       TF_VAR_openai_api_key: $(openai_api_key)
 
 - stage: app
-  dependsOn: terraform
   jobs:
     - job: app_name
       steps:
