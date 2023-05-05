@@ -2,6 +2,7 @@ import json
 import os
 import requests
 import streamlit as st
+import urllib.parse
 import uuid
 
 
@@ -29,12 +30,13 @@ def call_endpoint(url, language, text, key, region):
     }]
 
     try:
+        data = None
         response = requests.post(url, params=params,
                                 headers=headers, json=body,
                                 verify=False, timeout=10)
         response.raise_for_status()
         if response.headers.get('Content-Type') == 'application/json':
-            data = request.json()
+            data = response.json()
         else:
             raise ValueError("The response is not in JSON format.")
     except requests.exceptions.Timeout:
@@ -42,9 +44,13 @@ def call_endpoint(url, language, text, key, region):
     except requests.exceptions.ConnectionError:
         st.error("Please check your internet connection.")
     except requests.exceptions.HTTPError as err:
-        st.error("Http Error:", err)
+        st.error("Http Error: " + str(err))
     except requests.exceptions.RequestException as err:
-        st.error("Something went wrong:", err)
+        st.error("Something went wrong: " + str(err))
+
+    if data is None:
+        # handle error case where data is not returned
+        return None
 
     return data
 
@@ -61,17 +67,28 @@ def translate_text(text, language, debug):
         st.exception(ex)
 
     path = 'translator/text/v3.0/translate?api-version=3.0'
-    constructed_url = endpoint + path
-
-    response = call_endpoint(url=endpoint, text=text, key=key,
-                             region=region, language=language)
+    # constructed_url = endpoint + path
+    url = urllib.parse.urljoin(endpoint, path)
     if debug:
-        st.markdown(json.dumps(response, sort_keys=True,
-                               ensure_ascii=False, indent=4,
-                               separators=(',', ': ')))
+        st.write(url)
+
+
+    response = call_endpoint(url=url, text=text, key=key,
+                             region=region, language=language)
+
+
+    if response is None:
+        st.error("No response from Cognitive Services")
+        return
+    else:
+        if debug:
+            st.markdown(json.dumps(response, sort_keys=True,
+                                ensure_ascii=False, indent=4,
+                                separators=(',', ': ')))
 
     translation = response[0]["translations"][0]["text"]
     st.markdown(translation)
+
 
 st.set_page_config(
     page_title='Translate Text',

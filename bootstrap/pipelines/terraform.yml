@@ -53,3 +53,13 @@ stages:
     terraformDirectory: '$(System.DefaultWorkingDirectory)/ai-demo-src/terraform'
     terraformTfVars:
       TF_VAR_openai_api_key: $(openai_api_key)
+
+- stage: app
+  dependsOn: terraform
+  jobs:
+    - job: app_name
+      steps:
+
+      - script: |
+          echo "test"
+        displayName: "test"
