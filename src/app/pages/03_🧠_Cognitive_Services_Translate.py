@@ -100,7 +100,14 @@ st.set_page_config(
 st.title('🧠 Translate Text')
 
 st.markdown("Translate text using Azure Cognitive Services")
-txt = st.text_input("Text", "Hello world!")
+txt = st.text_input(
+    "Text",
+    "In order to perform a sequence of complicated calculations in a rapid"
+    " and correct manner, it is necessary to have not only the power of"
+    " directing the particular operations, but the more difficult one "
+    " of arranging beforehand the exact order in which they shall"
+    " succeed each other"
+)
 # https://learn.microsoft.com/en-us/azure/cognitive-services/translator
 # /language-support
 lang = st.selectbox('Language', ['de', 'es', 'fr', 'it', 'pl'])
