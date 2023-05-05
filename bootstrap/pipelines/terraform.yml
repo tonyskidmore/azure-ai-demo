@@ -60,6 +60,6 @@ stages:
     - job: app_name
       steps:
 
-      - script: |
-          echo "test"
-        displayName: "test"
+        - script: |
+            echo "test"
+          displayName: "test"
