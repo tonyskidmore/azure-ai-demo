@@ -70,7 +70,9 @@ def translate_text(text, language, debug):
     # constructed_url = endpoint + path
     url = urllib.parse.urljoin(endpoint, path)
     if debug:
-        st.write(url)
+        st.write(f"endpoint: {endpoint}")
+        st.write(f"path: {path}")
+        st.write(f"url: {url}")
 
 
     response = call_endpoint(url=url, text=text, key=key,
