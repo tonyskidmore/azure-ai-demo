@@ -66,7 +66,8 @@ def translate_text(text, language, debug):
     except ValueError as ex:
         st.exception(ex)
 
-    path = 'translator/text/v3.0/translate?api-version=3.0'
+    # path = 'translator/text/v3.0/translate?api-version=3.0'
+    path = 'translate'
     # constructed_url = endpoint + path
     url = urllib.parse.urljoin(endpoint, path)
     if debug:
@@ -78,6 +79,7 @@ def translate_text(text, language, debug):
     response = call_endpoint(url=url, text=text, key=key,
                              region=region, language=language)
 
+    st.write(response)
 
     if response is None:
         st.error("No response from Cognitive Services")
@@ -100,7 +102,7 @@ st.set_page_config(
 st.title('🧠 Translate Text')
 
 st.markdown("Translate text using Azure Cognitive Services")
-txt = st.text_input(
+txt = st.text_area(
     "Text",
     "In order to perform a sequence of complicated calculations in a rapid"
     " and correct manner, it is necessary to have not only the power of"
