@@ -61,5 +61,9 @@ stages:
       steps:
 
         - script: |
-            echo "test"
-          displayName: "test"
+             az extension add --name azure-devops --yes
+          displayName: "Install Azure DevOps extension"
+
+        - script: |
+            az pipelines run --name application --org $(ado_org) --project $(project)
+          displayName: "Trigger application pipeline"
