@@ -55,7 +55,7 @@ stages:
       TF_VAR_openai_api_key: $(openai_api_key)
 
 - stage: app
-  condition: and(succeeded(), eq(parameters.operation, 'terraform-plan-apply') )
+  condition: and(succeeded(), eq('${{ parameters.operation }}', 'terraform-plan-apply') )
   jobs:
     - job: app_name
       steps:
