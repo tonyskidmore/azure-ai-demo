@@ -12,6 +12,11 @@ st.set_page_config(
 
 st.title('🚢 Titanic Survival ML Model')
 
+st.markdown(
+    "This example uses a pre-built model to predict if a passenger "
+    " survived the Titanic disaster based on their information. "
+    "The model was built using the [Titanic dataset](https://www.kaggle.com/c/titanic/data) "
+)
 
 # st.info("`ExperimentalBaseConnection` makes it easy to build, use and share your own connection implementations.", icon="💡")
 
@@ -27,23 +32,19 @@ def predict():
     else:
         st.error('Passenger did not Survive :thumbsdown:')
 
-# st.markdown("Titanic survival ML model")
 
 PrepProcesor()
 model = joblib.load('xgbpipe.joblib')
-# st.title('Did they survive? :ship:')
-# PassengerId,Pclass,Name,Sex,Age,SibSp,Parch,Ticket,Fare,Cabin,Embarked
-# passengerid = st.text_input("Input Passenger ID", '123456')
+
 PASSENGER_ID = "123456"
 pclass = st.selectbox('Ticket class (1 = 1st, 2 = 2nd, 3 = 3rd)',
                     [1, 2, 3])
-# name  = st.text_input("Input Passenger Name", 'John Smith')
+
 NAME = "Not Applicable"
 sex = st.selectbox('Sex', ['female', 'male'])
 age = int(st.number_input('Age:', 0, 120, 20))
 sibsp = int(st.number_input('Siblings/Spouses:', 0, 10, 0))
 parch = st.number_input("Parents:", 0, 2)
-# ticket = st.text_input("Input Ticket Number", "12345")
 TICKET = "12345"
 fare = st.number_input("Input Fare Price", 0, 1000, 50)
 cabin = st.text_input("Input Cabin", "C52")

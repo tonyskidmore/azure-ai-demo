@@ -6,7 +6,7 @@ import urllib.parse
 import uuid
 
 
-def call_endpoint(url, language, text, key, region):
+def call_endpoint(url, language, text, key, region, debug):
     """ Call Azure Endpoint """
 
     params = {
@@ -34,8 +34,17 @@ def call_endpoint(url, language, text, key, region):
         response = requests.post(url, params=params,
                                 headers=headers, json=body,
                                 verify=False, timeout=10)
+
+        if debug:
+            st.write(response)
+            st.write(dir(response))
+            st.write(response.headers)
+            st.write(response.headers.get('Content-Type'))
+            st.write(response.json())
+
         response.raise_for_status()
-        if response.headers.get('Content-Type') == 'application/json':
+        content_type = response.headers.get('Content-Type')
+        if 'application/json' in content_type:
             data = response.json()
         else:
             raise ValueError("The response is not in JSON format.")
@@ -77,9 +86,8 @@ def translate_text(text, language, debug):
 
 
     response = call_endpoint(url=url, text=text, key=key,
-                             region=region, language=language)
-
-    st.write(response)
+                             region=region, language=language,
+                             debug=debug)
 
     if response is None:
         st.error("No response from Cognitive Services")
