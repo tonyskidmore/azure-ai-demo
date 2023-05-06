@@ -57,12 +57,16 @@ stages:
 - stage: app
   condition: and(succeeded(), eq('${{ parameters.operation }}', 'terraform-plan-apply') )
   jobs:
-    - job: app_name
+    - job: application
       steps:
 
         - script: |
              az extension add --name azure-devops --yes
           displayName: "Install Azure DevOps extension"
+
+        - script: |
+            echo  $(ado_ext_pat) | az devops login --organization $(ado_org)
+          displayName: Azure DevOps login
 
         - script: |
             az pipelines run --name application --org $(ado_org) --project $(project)

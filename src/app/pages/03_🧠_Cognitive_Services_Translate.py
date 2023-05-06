@@ -75,15 +75,16 @@ def translate_text(text, language, debug):
     except ValueError as ex:
         st.exception(ex)
 
-    # path = 'translator/text/v3.0/translate?api-version=3.0'
-    path = 'translate'
-    # constructed_url = endpoint + path
+    if "api.cognitive.microsofttranslator.com" in endpoint:
+        path = 'translate'
+    else:
+        path = 'translator/text/v3.0/translate?api-version=3.0'
+
     url = urllib.parse.urljoin(endpoint, path)
     if debug:
         st.write(f"endpoint: {endpoint}")
         st.write(f"path: {path}")
         st.write(f"url: {url}")
-
 
     response = call_endpoint(url=url, text=text, key=key,
                              region=region, language=language,
