@@ -41,7 +41,7 @@ git_repos = {
 }
 
 location                 = "uksouth"
-nsg_name                 = "nsg-azure-ai-demo"
+# nsg_name                 = "nsg-azure-ai-demo"
 resource_group_name      = "rg-azure-ai-demo-bootstrap"
 demo_resource_group_name = "rg-azure-ai-demo"
 vmss_name                = "vmss-azure-ai-demo-bootstrap-001"
