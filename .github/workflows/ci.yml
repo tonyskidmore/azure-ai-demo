@@ -56,7 +56,10 @@ jobs:
           python-version: '3.9'
           cache: 'pip' # caching pip dependencies
 
-      - name: Install Python packages
+      - name: Install repo Python packages
+        run: pip install -r src/app/requirements.txt
+
+      - name: Install app Python packages
         run: pip install -r src/app/requirements.txt
 
       - name: Setup TFLint
@@ -78,12 +81,12 @@ jobs:
           sudo wget -O /bin/hadolint "https://github.com/hadolint/hadolint/releases/download/v$HADOLINT_VERSION/hadolint-Linux-x86_64"
           sudo chmod +x /bin/hadolint
 
-      - name: Patch .pre-commit-config.yaml
-        run: |
-          sed -i '/terraform-docs/,+4d' \
-            "$GITHUB_WORKSPACE/.pre-commit-config.yaml"
-          sed -i '/- id: end-of-file-fixer/d' \
-            "$GITHUB_WORKSPACE/.pre-commit-config.yaml"
+      # - name: Patch .pre-commit-config.yaml
+      #   run: |
+      #     sed -i '/terraform-docs/,+4d' \
+      #       "$GITHUB_WORKSPACE/.pre-commit-config.yaml"
+      #     sed -i '/- id: end-of-file-fixer/d' \
+      #       "$GITHUB_WORKSPACE/.pre-commit-config.yaml"
 
       - name: Pre-commit check all files
         run: |
