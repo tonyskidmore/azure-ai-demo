@@ -6,16 +6,21 @@ ARG USER_UID=1000
 RUN echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    dialog \
-    openssh-server \
+    dialog=1.3-20201126-1 \
+    openssh-server=1:8.4p1-5+deb11u1 \
     build-essential=12.9 \
     curl=7.74.0-1.3+deb11u7 \
-    sudo \
-    ca-certificates=20210119
+    sudo=1.9.5p2-3+deb11u1 \
+    ca-certificates=20210119 && \
+    apt-get autoremove -y \
+    && apt-get clean -y \
+    && rm -rf /var/lib/apt/lists/*
 
 COPY entrypoint.sh /
 COPY app /app
 COPY sshd_config /etc/ssh
+
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
 
 RUN echo "root:Docker!" | chpasswd && \
     chmod u+x /entrypoint.sh && \

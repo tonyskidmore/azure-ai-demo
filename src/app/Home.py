@@ -1,18 +1,21 @@
-""" Streamlit App """
-import streamlit as st
-from collections import namedtuple
+# pylint: disable=invalid-name
+""" Homepage Streamlit app """
+
 import math
+from collections import namedtuple
+
+# from streamlit_extras.switch_page_button import switch_page
 import altair as alt
 import pandas as pd
+import streamlit as st
 
 
 def main():
-    """ Main """
+    """Main"""
 
-    from streamlit_extras.switch_page_button import switch_page
-
-    st.set_page_config(layout="centered", page_title="Azure AI Demo App", page_icon="👑")
-
+    st.set_page_config(
+        layout="centered", page_title="Azure AI Demo App", page_icon="👑"
+    )
 
     @st.cache_data
     def icon(emoji: str):
@@ -21,7 +24,6 @@ def main():
             f'<span style="font-size: 78px; line-height: 1">{emoji}</span>',
             unsafe_allow_html=True,
         )
-
 
     icon(":crown:")
     st.title("Azure AI Demo App")
@@ -46,15 +48,13 @@ def main():
         " forms, tables, and charts, to create engaging user interfaces."
     )
 
-    st.markdown(
-        "For example, like this:"
-    )
+    st.markdown("For example, like this:")
 
-    with st.echo(code_location='below'):
+    with st.echo(code_location="below"):
         total_points = st.slider("Number of points in spiral", 1, 5000, 2000)
         num_turns = st.slider("Number of turns in spiral", 1, 100, 9)
 
-        Point = namedtuple('Point', 'x y')
+        Point = namedtuple("Point", "x y")
         data = []
 
         points_per_turn = total_points / num_turns
@@ -67,10 +67,12 @@ def main():
             y = radius * math.sin(angle)
             data.append(Point(x, y))
 
-        st.altair_chart(alt.Chart(pd.DataFrame(data), height=500, width=500)
-                        .mark_circle(color='#0068c9', opacity=0.5)
-                        .encode(x='x:Q', y='y:Q'))
+        st.altair_chart(
+            alt.Chart(pd.DataFrame(data), height=500, width=500)
+            .mark_circle(color="#0068c9", opacity=0.5)
+            .encode(x="x:Q", y="y:Q")
+        )
 
 
 if __name__ == "__main__":
-   main()
+    main()

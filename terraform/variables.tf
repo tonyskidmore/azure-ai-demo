@@ -64,10 +64,10 @@ variable "subnet_name_vnet_integration" {
   description = "Name of the vnet integration subnet"
 }
 
-variable "subnet_name_ado_agents" {
-  type        = string
-  description = "Name of the ADO agents subnet"
-}
+# variable "subnet_name_ado_agents" {
+#   type        = string
+#   description = "Name of the ADO agents subnet"
+# }
 
 variable "app_service_plan_name" {
   type        = string

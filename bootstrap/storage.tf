@@ -1,12 +1,15 @@
 resource "azurerm_storage_account" "azure-ai-demo" {
-  name                            = "sademoai${random_string.build_index.result}"
-  resource_group_name             = azurerm_resource_group.azure-ai-demo.name
-  location                        = azurerm_resource_group.azure-ai-demo.location
-  account_tier                    = "Standard"
-  account_replication_type        = "LRS"
-  public_network_access_enabled   = true
+  name                     = "sademoai${random_string.build_index.result}"
+  resource_group_name      = azurerm_resource_group.azure-ai-demo.name
+  location                 = azurerm_resource_group.azure-ai-demo.location
+  account_tier             = "Standard"
+  account_replication_type = "LRS"
+  # terraform bootstrap setup current relies on public access to storage account
+  #checkov:skip=CKV_AZURE_59: "Ensure that Storage accounts disallow public access
+  #checkov:skip=CKV_AZURE_190: Ensure that Storage blobs restrict public access
+  public_network_access_enabled = true
   # allow_nested_items_to_be_public = false
-  min_tls_version                 = "TLS1_2"
+  min_tls_version = "TLS1_2"
   # Blocks of type "logging" are not expected here
   # logging {
   #   delete                = true
