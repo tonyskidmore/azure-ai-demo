@@ -2,6 +2,7 @@
 
 name: Build
 
+# yamllint disable rule:truthy
 on:
   workflow_dispatch:
   push:
