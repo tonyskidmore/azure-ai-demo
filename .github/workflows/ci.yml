@@ -33,6 +33,7 @@ jobs:
         env:
           VALIDATE_ALL_CODEBASE: true
           VALIDATE_JSCPD: false
+          VALIDATE_TERRAFORM_TERRASCAN: false
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
@@ -69,7 +70,8 @@ jobs:
 
       - name: Install terrascan
         run: |
-          curl -L "$(curl -s https://api.github.com/repos/tenable/terrascan/releases/latest | grep -o -E "https://.+?_Linux_x86_64.tar.gz")" > terrascan.tar.gz && \
+          curl -L "$(curl -s https://api.github.com/repos/tenable/terrascan/releases/latest | \
+            grep -o -E "https://.+?_Linux_x86_64.tar.gz")" > terrascan.tar.gz && \
           tar -xf terrascan.tar.gz terrascan && \
           rm terrascan.tar.gz && \
           install terrascan /usr/local/bin && \
@@ -78,7 +80,8 @@ jobs:
 
       - name: Install hadolint
         run: |
-          sudo wget -O /bin/hadolint "https://github.com/hadolint/hadolint/releases/download/v$HADOLINT_VERSION/hadolint-Linux-x86_64"
+          sudo wget -O /bin/hadolint \
+            "https://github.com/hadolint/hadolint/releases/download/v$HADOLINT_VERSION/hadolint-Linux-x86_64"
           sudo chmod +x /bin/hadolint
 
       # - name: Patch .pre-commit-config.yaml

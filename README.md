@@ -11,14 +11,14 @@
 
 ## Overview
 
-This repo contains code for creating and deploying an example [Streamlit](https://streamlit.io/) application.
+This repository contains code for creating and deploying an example [Streamlit](https://streamlit.io/) application.
 
 ![azure-ai-demo](images/azure-ai-demo.png)
 
 The demo application was created to show how you can use the following:
 
 * Showcase Streamlit's capabilities
-* Putting a web front end in front of a pre-trained machine learning model.
+* Putting a web frontend in front of a pre-trained machine learning model.
 * Using OpenAI REST API as part of an application.
 * Using Azure Cognitive Services to provide easy to consume AI to enhance your application.
 
@@ -51,7 +51,7 @@ If you have Docker installed locally you can build and test the container applic
 
 ## Deploying to Azure and Azure DevOps
 
-This repo contains Terraform code to deploy the demo Streamlit containerized application to an Azure Web App, including all of the necessary resources to support the deployment e.g. Virtual network, Subnets, Container registry, KeyVault and Cognitive Services.
+This repository contains Terraform code to deploy the demo Streamlit containerized application to an Azure Web App, including all of the necessary resources to support the deployment e.g. Virtual network, Subnets, Container registry, KeyVault and Cognitive Services.
 
 It will also create an Azure DevOps project, AzureRM service connection, Pipelines (terraform and application), Scale Set Agent pool with an associated self-hosted Azure Virtual Machine Scale Set on the Virtual network.
 
