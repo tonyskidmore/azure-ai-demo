@@ -5,6 +5,7 @@ permissions:
 
 name: Lint Code Base
 
+# yamllint disable rule:truthy
 on:
   workflow_dispatch:
   push:
@@ -23,11 +24,8 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
         with:
-          # Full git history is needed to get a proper list
-          # of changed files within `super-linter`
           fetch-depth: 0
 
-        # https://github.com/marketplace/actions/super-linter
       - name: Lint Code Base
         uses: github/super-linter@v4
         env:
@@ -47,18 +45,16 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
         with:
-          # Full git history is needed to get a proper list
-          # of changed files within `super-linter`
           fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-          cache: 'pip' # caching pip dependencies
+          cache: 'pip'
 
       - name: Install repo Python packages
-        run: pip install -r src/app/requirements.txt
+        run: pip install -r requirements.txt
 
       - name: Install app Python packages
         run: pip install -r src/app/requirements.txt
@@ -68,15 +64,15 @@ jobs:
         with:
           tflint_version: latest
 
-      - name: Install terrascan
-        run: |
-          curl -L "$(curl -s https://api.github.com/repos/tenable/terrascan/releases/latest | \
-            grep -o -E "https://.+?_Linux_x86_64.tar.gz")" > terrascan.tar.gz && \
-          tar -xf terrascan.tar.gz terrascan && \
-          rm terrascan.tar.gz && \
-          install terrascan /usr/local/bin && \
-          rm terrascan && \
-          terrascan version
+      # - name: Install terrascan
+      #   run: |
+      #     curl -L "$(curl -s https://api.github.com/repos/tenable/terrascan/releases/latest | \
+      #       grep -o -E "https://.+?_Linux_x86_64.tar.gz")" > terrascan.tar.gz && \
+      #     tar -xf terrascan.tar.gz terrascan && \
+      #     rm terrascan.tar.gz && \
+      #     install terrascan /usr/local/bin && \
+      #     rm terrascan && \
+      #     terrascan version
 
       - name: Install hadolint
         run: |
