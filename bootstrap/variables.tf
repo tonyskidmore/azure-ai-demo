@@ -102,7 +102,7 @@ variable "build_definitions" {
 
 variable "git_repos" {
   type = map(object({
-    name = string
+    name           = string
     default_branch = string
     initialization = map(string)
   }))

@@ -10,12 +10,12 @@ resource "azurerm_service_plan" "application" {
 }
 
 resource "azurerm_linux_web_app" "application" {
-  name                       = "${var.app_service_name}${random_string.build_index.result}"
-  resource_group_name        = data.azurerm_resource_group.ai-demo.name
-  location                   = var.location
-  service_plan_id            = azurerm_service_plan.application.id
-  https_only                 = true
-  client_certificate_mode    = "Optional"
+  name                    = "${var.app_service_name}${random_string.build_index.result}"
+  resource_group_name     = data.azurerm_resource_group.ai-demo.name
+  location                = var.location
+  service_plan_id         = azurerm_service_plan.application.id
+  https_only              = true
+  client_certificate_mode = "Optional"
 
   tags = var.tags
 

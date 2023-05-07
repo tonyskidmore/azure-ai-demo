@@ -97,7 +97,7 @@ resource "azurerm_private_endpoint" "kv" {
 
 resource "time_sleep" "wait_for_dns" {
   create_duration = "120s"
-  depends_on      = [
+  depends_on = [
     azurerm_private_endpoint.kv,
     azurerm_key_vault_access_policy.sp,
     azurerm_private_dns_zone_virtual_network_link.kv

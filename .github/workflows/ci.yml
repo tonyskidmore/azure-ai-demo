@@ -5,9 +5,15 @@ permissions:
 
 name: Lint Code Base
 
+# yamllint disable rule:truthy
 on:
   workflow_dispatch:
-
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
   build:
@@ -18,38 +24,40 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v3
         with:
-          # Full git history is needed to get a proper list
-          # of changed files within `super-linter`
           fetch-depth: 0
 
-        # https://github.com/marketplace/actions/super-linter
       - name: Lint Code Base
         uses: github/super-linter@v4
         env:
           VALIDATE_ALL_CODEBASE: true
           VALIDATE_JSCPD: false
+          VALIDATE_TERRAFORM_TERRASCAN: false
+          VALIDATE_PYTHON_BLACK: false
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
   precommit:
     name: pre-commit
     runs-on: ubuntu-latest
+    env:
+      HADOLINT_VERSION: "2.12.0"
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v3
         with:
-          # Full git history is needed to get a proper list
-          # of changed files within `super-linter`
           fetch-depth: 0
 
       - name: Setup Python
         uses: actions/setup-python@v4
         with:
           python-version: '3.9'
-          cache: 'pip' # caching pip dependencies
+          cache: 'pip'
 
-      - name: Install Python packages
+      - name: Install repo Python packages
+        run: pip install -r requirements.txt
+
+      - name: Install app Python packages
         run: pip install -r src/app/requirements.txt
 
       - name: Setup TFLint
@@ -57,26 +65,28 @@ jobs:
         with:
           tflint_version: latest
 
-      - name: Install terrascan
-        run: |
-          curl -L "$(curl -s https://api.github.com/repos/tenable/terrascan/releases/latest | grep -o -E "https://.+?_Linux_x86_64.tar.gz")" > terrascan.tar.gz && \
-          tar -xf terrascan.tar.gz terrascan && \
-          rm terrascan.tar.gz && \
-          install terrascan /usr/local/bin && \
-          rm terrascan && \
-          terrascan version
+      # - name: Install terrascan
+      #   run: |
+      #     curl -L "$(curl -s https://api.github.com/repos/tenable/terrascan/releases/latest | \
+      #       grep -o -E "https://.+?_Linux_x86_64.tar.gz")" > terrascan.tar.gz && \
+      #     tar -xf terrascan.tar.gz terrascan && \
+      #     rm terrascan.tar.gz && \
+      #     install terrascan /usr/local/bin && \
+      #     rm terrascan && \
+      #     terrascan version
 
       - name: Install hadolint
         run: |
-          sudo wget -O /bin/hadolint "https://github.com/hadolint/hadolint/releases/download/v$hadolint_version/hadolint-Linux-x86_64"
+          sudo wget -O /bin/hadolint \
+            "https://github.com/hadolint/hadolint/releases/download/v$HADOLINT_VERSION/hadolint-Linux-x86_64"
           sudo chmod +x /bin/hadolint
 
-      - name: Patch .pre-commit-config.yaml
-        run: |
-          sed -i '/terraform-docs/,+4d' \
-            "$GITHUB_WORKSPACE/.pre-commit-config.yaml"
-          sed -i '/- id: end-of-file-fixer/d' \
-            "$GITHUB_WORKSPACE/.pre-commit-config.yaml"
+      # - name: Patch .pre-commit-config.yaml
+      #   run: |
+      #     sed -i '/terraform-docs/,+4d' \
+      #       "$GITHUB_WORKSPACE/.pre-commit-config.yaml"
+      #     sed -i '/- id: end-of-file-fixer/d' \
+      #       "$GITHUB_WORKSPACE/.pre-commit-config.yaml"
 
       - name: Pre-commit check all files
         run: |

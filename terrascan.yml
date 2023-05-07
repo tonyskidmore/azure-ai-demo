@@ -1,9 +1,0 @@
----
-
-rules:
-#   scan-rules:
-#     - AWS.S3Bucket.DS.High.1043
-#     - AWS.S3Bucket.IAM.High.0370
-  skip-rules:
-    - AWS.S3Bucket.DS.High.1043
-    - AWS.S3Bucket.IAM.High.0370

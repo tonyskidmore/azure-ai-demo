@@ -2,20 +2,22 @@
 
 name: "terraform"
 
+trigger: none
+
 parameters:
-- name: operation
-  displayName: Operation Mode
-  type: string
-  default: terraform-plan-apply
-  values:
-  - terraform-plan-apply
-  - terraform-destroy
+  - name: operation
+    displayName: Operation Mode
+    type: string
+    default: terraform-plan-apply
+    values:
+      - terraform-plan-apply
+      - terraform-destroy
 
 
 variables:
-- group: build
-- name: serviceConnection
-  value: "azure-ai-demo"
+  - group: build
+  - name: serviceConnection
+    value: "azure-ai-demo"
 
 pool:
   name: 'vmss-bootstrap-pool'
@@ -29,25 +31,43 @@ resources:
 
 stages:
 
-- template: terraform/terraform.yml@pipelines
-  parameters:
-    # azureSubscription: '${{ variables.serviceConnection }}'
-    ${{ if eq(parameters.operation, 'terraform-destroy') }}:
-      destroyMode: true
-    environmentParameters:
-      demo:
-        azureSubscription: $(serviceConnection)
-        beStorageAccountName: $(state_storage_account_name)
-        beContainerName: $(state_container_name)
-        beKey: "azure-ai-demo.tfstate"
-        beResourceGroupName: $(state_resource_group_name)
-        beSubscriptionId: $(azurerm_subscription_id)
-        dependsOn: []
-        environmentName: "demo"
-    initCheckout:
-      - self
-      - git://$(project)/pipelines
-    poolName: 'vmss-bootstrap-pool'
-    terraformDirectory: '$(System.DefaultWorkingDirectory)/ai-demo-src/terraform'
-    terraformTfVars:
-      TF_VAR_openai_api_key: $(openai_api_key)
+  - template: terraform/terraform.yml@pipelines
+    parameters:
+      # azureSubscription: '${{ variables.serviceConnection }}'
+      ${{ if eq(parameters.operation, 'terraform-destroy') }}:
+        destroyMode: true
+      environmentParameters:
+        demo:
+          azureSubscription: $(serviceConnection)
+          beStorageAccountName: $(state_storage_account_name)
+          beContainerName: $(state_container_name)
+          beKey: "azure-ai-demo.tfstate"
+          beResourceGroupName: $(state_resource_group_name)
+          beSubscriptionId: $(azurerm_subscription_id)
+          dependsOn: []
+          environmentName: "demo"
+      initCheckout:
+        - self
+        - git://$(project)/pipelines
+      poolName: 'vmss-bootstrap-pool'
+      terraformDirectory: '$(System.DefaultWorkingDirectory)/ai-demo-src/terraform'
+      terraformTfVars:
+        TF_VAR_openai_api_key: $(openai_api_key)
+
+  - stage: app
+    condition: and(succeeded(), eq('${{ parameters.operation }}', 'terraform-plan-apply') )
+    jobs:
+      - job: application
+        steps:
+
+          - script: |
+              az extension add --name azure-devops --yes
+            displayName: "Install Azure DevOps extension"
+
+          - script: |
+              echo  $(ado_ext_pat) | az devops login --organization $(ado_org)
+            displayName: Azure DevOps login
+
+          - script: |
+              az pipelines run --name application --org $(ado_org) --project $(project)
+            displayName: "Trigger application pipeline"

@@ -21,7 +21,7 @@ build_definitions = {
 
 git_repos = {
   "repo1" = {
-    name = "ai-demo-src",
+    name           = "ai-demo-src",
     default_branch = "refs/heads/main",
     initialization = {
       init_type   = "Import",
@@ -40,8 +40,8 @@ git_repos = {
   }
 }
 
-location                 = "uksouth"
-nsg_name                 = "nsg-azure-ai-demo"
+location = "uksouth"
+# nsg_name                 = "nsg-azure-ai-demo"
 resource_group_name      = "rg-azure-ai-demo-bootstrap"
 demo_resource_group_name = "rg-azure-ai-demo"
 vmss_name                = "vmss-azure-ai-demo-bootstrap-001"
