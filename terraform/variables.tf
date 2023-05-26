@@ -87,23 +87,23 @@ variable "app_service_name" {
 #   default     = "azureaidemo"
 # }
 
-variable "cognitive_account_name" {
-  type        = string
-  description = "Azure Cognitive Services Account name"
-  default     = "azureaidemo"
-}
+# variable "cognitive_account_name" {
+#   type        = string
+#   description = "Azure Cognitive Services Account name"
+#   default     = "azureaidemo"
+# }
 
-variable "cognitive_sku" {
-  type        = string
-  description = "Azure Cognitive Services SKU"
-  default     = "S1"
-}
+# variable "cognitive_sku" {
+#   type        = string
+#   description = "Azure Cognitive Services SKU"
+#   default     = "S1"
+# }
 
-variable "cognitive_kind" {
-  type        = string
-  description = "Azure Cognitive Services service"
-  default     = "TextTranslation"
-}
+# variable "cognitive_kind" {
+#   type        = string
+#   description = "Azure Cognitive Services service"
+#   default     = "TextTranslation"
+# }
 
 variable "cognitive_custom_subdomain" {
   type        = string
@@ -126,4 +126,20 @@ variable "key_vault_name" {
 variable "openai_api_key" {
   type        = string
   description = "OpenAI API Key"
+}
+
+variable "cognitive_services" {
+  type = map(object({
+    name           = string
+    kind           = string
+    location       = string
+    sku_name       = string
+  }))
+  description = "Cognitive Services to deploy"
+}
+
+variable "private_dns_zones" {
+  type        = list(string)
+  description = "Private DNS Zones to create"
+  default    = ["privatelink.cognitiveservices.azure.com"]
 }

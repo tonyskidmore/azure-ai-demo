@@ -1,9 +1,10 @@
 resource "azurerm_cognitive_account" "translate" {
-  name                               = "cs${var.cognitive_account_name}${random_string.build_index.result}"
-  location                           = var.location
+  for_each                           = var.cognitive_services
+  name                               = "cs${each.value.name}${random_string.build_index.result}"
+  location                           = each.value.name == null ? var.location : each.value.name
   resource_group_name                = data.azurerm_resource_group.ai-demo.name
-  kind                               = var.cognitive_kind
-  sku_name                           = var.cognitive_sku
+  kind                               = each.value.kind
+  sku_name                           = each.value.name
   custom_subdomain_name              = var.cognitive_private_link ? "cs${var.cognitive_custom_subdomain}${random_string.build_index.result}" : null
   outbound_network_access_restricted = var.cognitive_private_link ? false : true
   public_network_access_enabled      = var.cognitive_private_link ? false : true
@@ -29,18 +30,20 @@ resource "azurerm_cognitive_account" "translate" {
 }
 
 resource "azurerm_private_dns_zone" "cs" {
-  count               = var.cognitive_private_link ? 1 : 0
-  name                = "privatelink.cognitiveservices.azure.com"
+  # count               = var.cognitive_private_link ? 1 : 0
+  for_each            = local.private_dns_zones
+  name                = each.key
   resource_group_name = data.azurerm_resource_group.ai-demo.name
 
   tags = var.tags
 }
 
 resource "azurerm_private_dns_zone_virtual_network_link" "cs" {
-  count                 = var.cognitive_private_link ? 1 : 0
-  name                  = azurerm_cognitive_account.translate.name
+  # count                 = var.cognitive_private_link ? 1 : 0
+  for_each              = local.private_dns_zones
+  name                  = each.key
   resource_group_name   = data.azurerm_resource_group.ai-demo.name
-  private_dns_zone_name = azurerm_private_dns_zone.cs[0].name
+  private_dns_zone_name = each.key
   virtual_network_id    = data.azurerm_virtual_network.bootstrap.id
 
   tags = var.tags
@@ -65,3 +68,6 @@ resource "azurerm_private_endpoint" "cs" {
     is_manual_connection           = false
   }
 }
+
+# https://github.com/shsorot/TerraformMonkeyWorks/blob/c7ebb44e51e830da1f58b053b29c44cd0607a9df/AzureRM/Modules/Network/Azure-PrivateEndpoint/1.0/azurerm_private_endpoint.tf#L2
+# https://github.com/briandenicola/azure/blob/1594d36da7a25b6343a2435a0a3b8c0a49b2b791/Templates/AzureRedisCache/Enterprise/redis.tf#L2
