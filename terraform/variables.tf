@@ -130,10 +130,10 @@ variable "openai_api_key" {
 
 variable "cognitive_services" {
   type = map(object({
-    name           = string
-    kind           = string
-    location       = string
-    sku_name       = string
+    name     = string
+    kind     = string
+    location = string
+    sku_name = string
   }))
   description = "Cognitive Services to deploy"
 }
@@ -141,5 +141,5 @@ variable "cognitive_services" {
 variable "private_dns_zones" {
   type        = list(string)
   description = "Private DNS Zones to create"
-  default    = ["privatelink.cognitiveservices.azure.com"]
+  default     = ["privatelink.cognitiveservices.azure.com"]
 }

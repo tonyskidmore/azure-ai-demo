@@ -1,10 +1,10 @@
-resource "azurerm_cognitive_account" "translate" {
+resource "azurerm_cognitive_account" "svc" {
   for_each                           = var.cognitive_services
   name                               = "cs${each.value.name}${random_string.build_index.result}"
-  location                           = each.value.name == null ? var.location : each.value.name
+  location                           = each.value.location == null ? var.location : each.value.location
   resource_group_name                = data.azurerm_resource_group.ai-demo.name
   kind                               = each.value.kind
-  sku_name                           = each.value.name
+  sku_name                           = each.value.sku_name
   custom_subdomain_name              = var.cognitive_private_link ? "cs${var.cognitive_custom_subdomain}${random_string.build_index.result}" : null
   outbound_network_access_restricted = var.cognitive_private_link ? false : true
   public_network_access_enabled      = var.cognitive_private_link ? false : true
@@ -31,8 +31,11 @@ resource "azurerm_cognitive_account" "translate" {
 
 resource "azurerm_private_dns_zone" "cs" {
   # count               = var.cognitive_private_link ? 1 : 0
-  for_each            = local.private_dns_zones
-  name                = each.key
+  for_each = toset(local.private_dns_zones)
+  # for_each = { for svc in var.cognitive_services : svc.name => svc }
+  # TODO: lookup private dns zone from locals based on kind
+  # name                = lookup(local.cog_svc_private_dns_zone_lookup, each.value.kind, null)
+  name                = each.value
   resource_group_name = data.azurerm_resource_group.ai-demo.name
 
   tags = var.tags
@@ -40,32 +43,36 @@ resource "azurerm_private_dns_zone" "cs" {
 
 resource "azurerm_private_dns_zone_virtual_network_link" "cs" {
   # count                 = var.cognitive_private_link ? 1 : 0
-  for_each              = local.private_dns_zones
-  name                  = each.key
+  # for_each              = local.private_dns_zones
+  for_each              = azurerm_private_dns_zone.cs
+  name                  = each.value.name
   resource_group_name   = data.azurerm_resource_group.ai-demo.name
-  private_dns_zone_name = each.key
+  private_dns_zone_name = each.value.name
   virtual_network_id    = data.azurerm_virtual_network.bootstrap.id
 
   tags = var.tags
 }
 
 resource "azurerm_private_endpoint" "cs" {
-  count               = var.cognitive_private_link ? 1 : 0
-  name                = "pe-${var.cognitive_account_name}-cs"
-  location            = var.location
+  # count               = var.cognitive_private_link ? 1 : 0
+  for_each            = azurerm_cognitive_account.svc
+  name                = "pe-${each.value.name}-cs"
+  location            = each.value.location == null ? var.location : each.value.location
   resource_group_name = data.azurerm_resource_group.ai-demo.name
   subnet_id           = data.azurerm_subnet.private_endpoints.id
 
   private_dns_zone_group {
-    name                 = "private-dns-zone-group"
-    private_dns_zone_ids = [azurerm_private_dns_zone.cs[0].id]
+    name = "${each.value.name}-private-dns-zone-group"
+    # private_dns_zone_ids = [azurerm_private_dns_zone.cs[each.value.kind].id]
+    private_dns_zone_ids = [azurerm_private_dns_zone.cs[lookup(local.cog_svc_private_dns_zone_lookup, each.value.kind, null)].id]
   }
 
   private_service_connection {
-    name                           = azurerm_cognitive_account.translate.name
-    private_connection_resource_id = azurerm_cognitive_account.translate.id
-    subresource_names              = ["account"]
-    is_manual_connection           = false
+    name                           = each.value.name
+    private_connection_resource_id = each.value.id
+    # https://learn.microsoft.com/en-gb/azure/private-link/private-endpoint-overview#private-link-resource
+    subresource_names    = ["account"]
+    is_manual_connection = false
   }
 }
 

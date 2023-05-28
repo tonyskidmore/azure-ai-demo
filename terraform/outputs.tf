@@ -10,10 +10,10 @@ output "vnet_integration_subnet_id" {
   value = data.azurerm_subnet.vnet_integration.id
 }
 
-output "translator" {
-  value     = azurerm_cognitive_account.translate
-  sensitive = true
-}
+# output "translator" {
+#   value     = azurerm_cognitive_account.translate
+#   sensitive = true
+# }
 
 output "vnet_subnets" {
   value = data.azurerm_virtual_network.bootstrap

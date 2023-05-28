@@ -123,8 +123,9 @@ resource "azurerm_key_vault_secret" "openai" {
 }
 
 resource "azurerm_key_vault_secret" "cogkey" {
-  name            = "cog-service-key"
-  value           = azurerm_cognitive_account.translate.primary_access_key
+  name = "cog-service-key"
+  # TODO: lookup value based on key
+  value           = azurerm_cognitive_account.svc["translator"].primary_access_key
   key_vault_id    = azurerm_key_vault.application.id
   expiration_date = local.secret_expiry_date
   content_type    = "text/plain"
