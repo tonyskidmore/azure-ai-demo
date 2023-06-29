@@ -31,7 +31,7 @@ resource "azuredevops_git_repository" "repository" {
 resource "azuredevops_build_definition" "build_definition" {
   for_each = var.build_definitions
 
-  project_id      = azuredevops_project.project.id
+  project_id      = data.azuredevops_project.project.id
   name            = each.value.name
   path            = each.value.path
   agent_pool_name = var.ado_pool_name
