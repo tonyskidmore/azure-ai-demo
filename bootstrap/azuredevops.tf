@@ -3,15 +3,19 @@ resource "random_string" "build_index" {
   min_numeric = 6
 }
 
-resource "azuredevops_project" "project" {
-  name        = var.ado_project_name
-  description = var.ado_project_description
-  visibility  = var.ado_project_visibility
+# resource "azuredevops_project" "project" {
+#   name        = var.ado_project_name
+#   description = var.ado_project_description
+#   visibility  = var.ado_project_visibility
+# }
+
+data "azuredevops_project" "project" {
+  name        = "OpenHack"
 }
 
 resource "azuredevops_git_repository" "repository" {
   for_each       = var.git_repos
-  project_id     = azuredevops_project.project.id
+  project_id     = data.azuredevops_project.project.id
   name           = each.value.name
   default_branch = each.value.default_branch
   initialization {
@@ -76,14 +80,14 @@ curl \
   --header "Content-Type: application/json" \
   --request PATCH \
   --data "$payload" \
-  "$AZDO_ORG_SERVICE_URL/${var.ado_project_name}/_apis/pipelines/pipelinePermissions/repository/${azuredevops_project.project.id}.${azuredevops_git_repository.repository["repo2"].id}?api-version=7.0-preview.1" | jq .
+  "$AZDO_ORG_SERVICE_URL/${var.ado_project_name}/_apis/pipelines/pipelinePermissions/repository/${data.azuredevops_project.project.id}.${azuredevops_git_repository.repository["repo2"].id}?api-version=7.0-preview.1" | jq .
 EOF
   }
 }
 
 
 resource "azuredevops_environment" "demo" {
-  project_id  = azuredevops_project.project.id
+  project_id  = data.azuredevops_project.project.id
   name        = "demo"
   description = "Demo environment"
 }
@@ -119,7 +123,7 @@ EOF
 }
 
 resource "azuredevops_serviceendpoint_azurerm" "sub" {
-  project_id            = azuredevops_project.project.id
+  project_id            = data.azuredevops_project.project.id
   service_endpoint_name = var.service_endpoint_name
   description           = "Managed by Terraform"
   credentials {
@@ -133,7 +137,7 @@ resource "azuredevops_serviceendpoint_azurerm" "sub" {
 
 resource "azuredevops_resource_authorization" "azurerm" {
   for_each      = azuredevops_build_definition.build_definition
-  project_id    = azuredevops_project.project.id
+  project_id    = data.azuredevops_project.project.id
   resource_id   = azuredevops_serviceendpoint_azurerm.sub.id
   definition_id = each.value.id
   authorized    = true
@@ -141,7 +145,7 @@ resource "azuredevops_resource_authorization" "azurerm" {
 
 
 resource "azuredevops_variable_group" "vars" {
-  project_id   = azuredevops_project.project.id
+  project_id   = data.azuredevops_project.project.id
   name         = "build"
   description  = "Build variables"
   allow_access = true
@@ -224,7 +228,7 @@ module "terraform-azurerm-vmss-devops-agent" {
   version                  = "0.2.1"
   ado_org                  = var.ado_org
   ado_pool_name            = var.ado_pool_name
-  ado_project              = azuredevops_project.project.name
+  ado_project              = data.azuredevops_project.project.name
   ado_project_only         = "True"
   ado_service_connection   = azuredevops_serviceendpoint_azurerm.sub.service_endpoint_name
   ado_pool_desired_idle    = var.ado_pool_desired_idle
