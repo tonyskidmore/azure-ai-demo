@@ -17,7 +17,7 @@ parameters:
 variables:
   - group: build
   - name: serviceConnection
-    value: "azure-ai-demo"
+    value: "openhack-sub-2"
 
 pool:
   name: 'vmss-bootstrap-pool'
