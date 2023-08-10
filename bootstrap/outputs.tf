@@ -18,16 +18,16 @@ output "resource_group_name" {
   description = "Azure storage resource group name"
 }
 
-output "git_repo_id" {
-  value       = azuredevops_git_repository.repository["repo1"].id
-  description = "Azure storage resource group name"
-}
+# output "git_repo_id" {
+#   value       = azuredevops_git_repository.repository["repo1"].id
+#   description = "Azure storage resource group name"
+# }
 
-output "ado_project_name" {
-  value       = var.ado_project_name
-  description = "Azure DevOps project"
-}
+# output "ado_project_name" {
+#   value       = var.ado_project_name
+#   description = "Azure DevOps project"
+# }
 
-output "terraform_pipeline" {
-  value = azuredevops_build_definition.build_definition["pipeline1"].id
-}
+# output "terraform_pipeline" {
+#   value = azuredevops_build_definition.build_definition["pipeline1"].id
+# }

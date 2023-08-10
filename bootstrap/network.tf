@@ -25,9 +25,10 @@ module "network" {
     ]
   }
 
-  # subnet_service_endpoints = {
-  #   "snet-azure-ai-demo-private-endpoint"         = [ "Microsoft.CognitiveServices" ]
-  # }
+  # required?
+  subnet_service_endpoints = {
+    "snet-azure-ai-demo-private-endpoint"         = [ "Microsoft.CognitiveServices" ]
+  }
 
   tags         = var.tags
   use_for_each = true
