@@ -1,4 +1,4 @@
-ado_pool_name         = "vmss-bootstrap-pool"
+ado_pool_name         = "vmss-bootstrap"
 ado_pool_desired_idle = 0
 
 build_definitions = {
@@ -40,11 +40,11 @@ git_repos = {
   }
 }
 
-location = "uksouth"
+location = "eastus"
 # nsg_name                 = "nsg-azure-ai-demo"
 resource_group_name      = "rg-azure-ai-demo-bootstrap"
 demo_resource_group_name = "rg-azure-ai-demo"
-vmss_name                = "vmss-azure-ai-demo-bootstrap-001"
+vmss_name                = "vmss-bootstrap"
 vmss_admin_password      = "Sup3rS3cr3tP@55w0rd!"
 vmss_vnet_name           = "vnet-azure-ai-demo"
 vnet_address_space       = ["192.168.0.0/16"]

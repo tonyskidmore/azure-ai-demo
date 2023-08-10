@@ -17,6 +17,6 @@ resource "azurerm_resource_group" "demo" {
   tags     = var.tags
 }
 
-data "azuread_service_principal" "service-principal" {
-  application_id = var.serviceprincipalid
-}
+# data "azuread_service_principal" "service-principal" {
+#   application_id = var.serviceprincipalid
+# }
