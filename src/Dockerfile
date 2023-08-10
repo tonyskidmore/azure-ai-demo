@@ -6,12 +6,12 @@ ARG USER_UID=1000
 RUN echo "APT::Get::Assume-Yes \"true\";" > /etc/apt/apt.conf.d/90assumeyes
 
 RUN apt-get update && apt-get install -y --no-install-recommends \
-    dialog=1.3-20201126-1 \
-    openssh-server=1:8.4p1-5+deb11u1 \
+    dialog=1.3-20230209-1 \
+    openssh-server=1:9.2p1-2 \
     build-essential=12.9 \
-    curl=7.74.0-1.3+deb11u7 \
-    sudo=1.9.5p2-3+deb11u1 \
-    ca-certificates=20210119 && \
+    curl=7.88.1-10+deb12u1 \
+    sudo=1.9.13p3-1+deb12u1 \
+    ca-certificates=20230311 && \
     apt-get autoremove -y \
     && apt-get clean -y \
     && rm -rf /var/lib/apt/lists/*
