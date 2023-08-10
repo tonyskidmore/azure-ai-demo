@@ -17,7 +17,7 @@ parameters:
 variables:
   - group: build
   - name: serviceConnection
-    value: "openhack-sub-2"
+    value: "sc"
 
 pool:
   name: 'vmss-bootstrap-pool'

@@ -10,7 +10,7 @@ resource "random_string" "build_index" {
 # }
 
 data "azuredevops_project" "project" {
-  name        = "OpenHack"
+  name        = "Project"
 }
 
 # resource "azuredevops_git_repository" "repository" {
@@ -230,7 +230,7 @@ module "terraform-azurerm-vmss-devops-agent" {
   ado_pool_name            = var.ado_pool_name
   ado_project              = data.azuredevops_project.project.name
   ado_project_only         = "True"
-  ado_service_connection   = "openhack-sub-2"
+  ado_service_connection   = "sc"
   ado_pool_desired_idle    = var.ado_pool_desired_idle
   vmss_admin_password      = var.vmss_admin_password
   vmss_name                = var.vmss_name
