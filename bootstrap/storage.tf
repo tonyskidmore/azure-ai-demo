@@ -1,5 +1,5 @@
 resource "azurerm_storage_account" "azure-ai-demo" {
-  name                     = "sademoai${random_string.build_index.result}"
+  name                     = "saazureaidemo${random_string.build_index.result}"
   resource_group_name      = azurerm_resource_group.azure-ai-demo.name
   location                 = azurerm_resource_group.azure-ai-demo.location
   account_tier             = "Standard"
