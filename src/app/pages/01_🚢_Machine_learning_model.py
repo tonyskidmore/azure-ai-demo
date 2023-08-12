@@ -21,6 +21,11 @@ st.markdown(
     " [Titanic dataset](https://www.kaggle.com/c/titanic/data)"
 )
 
+st.markdown(
+    "Visit [Titanic Survival Prediction Machine Learning Model](https://github.com/tonyskidmore/titanic-ml-model/tree/main) "
+    "to find out how the model was built and trained."
+)
+
 
 def predict():
     """Titanic model prediction"""
