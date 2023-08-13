@@ -3,36 +3,63 @@
 """ ChatGPT example """
 
 import os
-
 import openai
 import streamlit as st
 
 
-def ask_gpt(content, role="user"):
-    """ChatGPT request"""
-    if os.environ.get("OPENAI_API_KEY") is not None:
-        openai.api_key = os.getenv("OPENAI_API_KEY")
-
-        completion = openai.ChatCompletion.create(
-            model="gpt-3.5-turbo",
-            messages=[{"role": role, "content": content}],
-        )
-        for choice in completion.choices:
-            st.markdown(choice.message.content)
-    else:
-        st.markdown(
-            "You need to set the OPENAI_API_KEY environment variable "
-            "to a valid OpenAI API key :no_entry_sign:"
-        )
+def clear_chat():
+    """Clear chat"""
+    st.session_state.messages = []
 
 
 st.set_page_config(page_title="Ask ChatGPT", page_icon="🙊")
-
 st.title("🙊 Ask ChatGPT")
 
-st.markdown("Ask questions to the OpenAI `gpt-3.5-turbo` model")
-text_input = st.text_input("Question", "Write a Haiku about GitOps")
+if st.button("New chat"):
+    clear_chat()
 
-ask = st.button("Ask")
-if ask:
-    ask_gpt(text_input)
+st.markdown(
+    "This example is a simple chatbot that uses the "
+    "[OpenAI API](https://platform.openai.com/docs/models/overview) "
+    "and GPT models to generate responses to your questions."
+)
+
+gpt_model = st.selectbox("Model", ["gpt-3.5-turbo", "gpt-4"])
+
+if os.environ.get("OPENAI_API_KEY") is not None:
+    openai.api_key = os.getenv("OPENAI_API_KEY")
+else:
+    st.error("OPENAI_API_KEY environment variable not set")
+    st.stop()
+
+if "openai_model" not in st.session_state:
+    st.session_state["openai_model"] = gpt_model
+
+if "messages" not in st.session_state:
+    st.session_state.messages = []
+
+for message in st.session_state.messages:
+    with st.chat_message(message["role"]):
+        st.markdown(message["content"])
+
+if prompt := st.chat_input("Send a message"):
+    st.session_state.messages.append({"role": "user", "content": prompt})
+    with st.chat_message("user"):
+        st.markdown(prompt)
+
+    with st.chat_message("assistant"):
+        message_placeholder = st.empty()
+        full_response = ""
+        for response in openai.ChatCompletion.create(
+            model=st.session_state["openai_model"],
+            messages=[
+                {"role": m["role"], "content": m["content"]}
+                for m in st.session_state.messages
+            ],
+            stream=True,
+        ):
+            full_response += response.choices[0].delta.get("content", "")
+            message_placeholder.markdown(full_response + "▌")
+        message_placeholder.markdown(full_response)
+    st.session_state.messages.append({"role": "assistant",
+                                      "content": full_response})
