@@ -33,3 +33,6 @@ override.tf.json
 bootstrap/.terraform.lock.hcl
 
 trace.log
+
+# used with generating embeddings
+*.pkl
