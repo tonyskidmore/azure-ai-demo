@@ -3,75 +3,117 @@
 """ Titanic survival model """
 
 import joblib
-import numpy as np
 import pandas as pd
 import streamlit as st
-
-# import streamlit as st
-from utils import PrepProcesor, columns
 
 st.set_page_config(page_title="Titanic Survival Model", page_icon="🚢")
 
 st.title("🚢 Titanic Survival ML Model")
 
 st.markdown(
-    "This example uses a pre-built model to predict if a passenger "
-    " survived the Titanic disaster based on their information. "
-    "The model was built using the"
-    " [Titanic dataset](https://www.kaggle.com/c/titanic/data)"
+    "[RMS Titanic](https://en.wikipedia.org/wiki/Titanic) was a British "
+    " passenger liner that sank in the "
+    "North Atlantic Ocean on 15 April 1912 after striking an iceberg "
+    "during her maiden voyage."
+)
+
+"""
+Titanic's passengers numbered approximately 1,317 people:
+
+* 324 in First Class
+* 284 in Second Class
+* 709 in Third Class
+
+Of these, 869 (66%) were male and 447 (34%) female  .
+Women and children survived at rates of about 75 percent and
+50 percent, while only 20 percent of men survived.
+"""
+
+st.markdown(
+    "**:red[706]** people survived the disaster and **:red[1,517]** people died."
 )
 
 st.markdown(
-    "Visit [Titanic Survival Prediction Machine Learning Model](https://github.com/tonyskidmore/titanic-ml-model/tree/main) "
-    "to find out how the model was built and trained."
+    "This example uses a pre-built model, stored on this application "
+    "container image, and is used to predict if a passenger is likely to "
+    "have survived the Titanic disaster based on the details entered in the "
+    "form below."
+)
+
+st.markdown(
+    "It is an example of using a pre-built machine learning model "
+    "within a Streamlit app."
+)
+
+st.markdown(
+    "Visit "
+    "[titanic-ml-model](https://github.com/tonyskidmore/titanic-ml-model) "
+    "to find out how the model was created."
 )
 
 
-def predict():
+def predict(data_frame):
     """Titanic model prediction"""
 
-    row = np.array(
-        [
-            PASSENGER_ID,
-            pclass,
-            NAME,
-            sex,
-            age,
-            sibsp,
-            parch,
-            TICKET,
-            fare,
-            cabin,
-            embarked,
-        ]
-    )
-    data_frame = pd.DataFrame([row], columns=columns)
+# Example data:
+#    PassengerId  Survived  Pclass   Age  SibSp  Parch     Fare  Sex_female  Sex_male  Embarked_C  Embarked_Q  Embarked_S
+# 0            1       0.0       3  22.0      1      0   7.2500       False      True       False       False        True
+# 1            2       1.0       1  38.0      1      0  71.2833        True     False        True       False       False
+# 2            3       1.0       3  26.0      0      0   7.9250        True     False       False       False        True
+# 3            4       1.0       1  35.0      1      0  53.1000        True     False       False       False        True
+# 4            5       0.0       3  35.0      0      0   8.0500       False      True       False       False        True
+
     prediction = model.predict(data_frame)
     if prediction[0] == 1:
         st.success("Passenger Survived :thumbsup:")
     else:
         st.error("Passenger did not Survive :thumbsdown:")
 
+model = joblib.load('model.joblib')
 
-PrepProcesor()
-model = joblib.load("xgbpipe.joblib")
+location_mapping = {
+    "Southampton": [1, 0, 0],
+    "Cherbourg": [0, 1, 0],
+    "Queenstown": [0, 0, 1],
+}
 
-PASSENGER_ID = "123456"
-pclass = st.selectbox("Ticket class (1 = 1st, 2 = 2nd, 3 = 3rd)", [1, 2, 3])
+sex_mapping = {
+    "male": [0, 1],
+    "female": [1, 0],
+}
 
-NAME = "Not Applicable"
-sex = st.selectbox("Sex", ["female", "male"])
-age = int(st.number_input("Age:", 0, 120, 20))
+# not applicable data but required for model
+passenger_id = "123456"
+pclass = int(st.selectbox("Class:", ["1", "2", "3"], index=2))
+sex = st.selectbox("Sex", ["male", "female"])
+age = int(st.number_input("Age:", 0, 55, 30))
 sibsp = int(st.number_input("Siblings/Spouses:", 0, 10, 0))
 parch = st.number_input("Parents:", 0, 2)
-TICKET = "12345"
-fare = st.number_input("Input Fare Price", 0, 1000, 50)
-cabin = st.text_input("Input Cabin", "C52")
+fare = st.number_input("Input Fare Price", 5, 515, 30)
 embarked = st.selectbox(
-    "Where did they Embark? (Southampton, Cherbourg, Queenstown)",
-    ["S", "C", "Q"],
+    "Where did they Embark?",
+    ["Southampton", "Cherbourg", "Queenstown"],
 )
 
-trigger = st.button("Predict", on_click=predict)
+female, male  = sex_mapping.get(sex, [0, 0])
+southampton, cherbourg, queenstown = location_mapping.get(embarked, [0, 0, 0])
 
-st.markdown("[GitHub](https://github.com/nicknochnack/StreamlitTitanic) code")
+data = pd.DataFrame({
+    'PassengerId': [passenger_id],
+    'Pclass': [pclass],
+    'Age': [age],
+    'SibSp': [sibsp],
+    'Parch': [parch],
+    'Fare': [fare],
+    'Sex_female': [female],
+    'Sex_male': [male],
+    'Embarked_C': [cherbourg],
+    'Embarked_Q': [queenstown],
+    'Embarked_S': [southampton],
+})
+
+# debugging
+# st.markdown(data.head())
+
+if st.button("Predict"):
+    on_click=predict(data)

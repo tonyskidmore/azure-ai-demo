@@ -14,19 +14,19 @@ def main():
     """Main"""
 
     st.set_page_config(
-        layout="centered", page_title="Azure AI Demo App", page_icon="👑"
+        layout="centered", page_title="Streamlit", page_icon="👑"
     )
 
-    @st.cache_data
-    def icon(emoji: str):
-        """Shows an emoji as a Notion-style page icon."""
-        st.write(
-            f'<span style="font-size: 78px; line-height: 1">{emoji}</span>',
-            unsafe_allow_html=True,
-        )
+    # @st.cache_data
+    # def icon(emoji: str):
+    #     """Shows an emoji as a Notion-style page icon."""
+    #     st.write(
+    #         f'<span style="font-size: 78px; line-height: 1">{emoji}</span>',
+    #         unsafe_allow_html=True,
+    #     )
 
-    icon(":crown:")
-    st.title("Azure AI Demo App")
+    # icon(":crown:")
+    st.title("Streamlit")
 
     st.markdown(
         "Streamlit is an open-source Python library that makes it easy to"

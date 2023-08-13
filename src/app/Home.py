@@ -29,23 +29,16 @@ def main():
     st.title("Azure AI Demo App")
 
     st.markdown(
-        "Application to show examples of using AI related capabilities."
+        "This is a demo application to show some examples of using "
+        "elements of Artificial Intelligence(AI) in various ways "
+        "within a Streamlit app."
     )
 
-    # st.markdown(
-    #     "It is designed to simplify"
-    #     " the process of creating data-centric applications by providing"
-    #     " an easy-to-use and intuitive interface for building and deploying"
-    #     " web applications without needing any web development experience."
-    # )
-
-    # st.markdown(
-    #     "With Streamlit, developers can create custom apps and visualizations"
-    #     " with just a few lines of Python code and quickly iterate on their"
-    #     " ideas. It also provides a variety of pre-built components like"
-    #     " forms, tables, and charts, to create engaging user interfaces."
-    # )
-
+    st.markdown(
+        "Navigate the sidebar to see the various examples. "
+        "Start with the Streamlit menu item to learn a little more "
+        "about this Python web application library."
+    )
 
 
 if __name__ == "__main__":
