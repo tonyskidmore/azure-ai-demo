@@ -3,13 +3,14 @@
 """ Chat with PDF data """
 
 import os
-from langchain.agents import ConversationalChatAgent, AgentExecutor
+
+import streamlit as st
+from langchain.agents import AgentExecutor, ConversationalChatAgent
 from langchain.callbacks import StreamlitCallbackHandler
 from langchain.chat_models import ChatOpenAI
 from langchain.memory import ConversationBufferMemory
 from langchain.memory.chat_message_histories import StreamlitChatMessageHistory
 from langchain.tools import DuckDuckGoSearchRun
-import streamlit as st
 
 st.set_page_config(page_title="LangChain: Chat with search", page_icon="🦜")
 st.title("🦜 LangChain: Chat with search")
