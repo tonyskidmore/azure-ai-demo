@@ -17,6 +17,7 @@ import os
 
 ## https://github.com/wmgillett/chat-pdf-langchain-faiss-streamlit/tree/main
 # https://github.com/lucasikruger/PDF-question-answer-llm-langchain-streamlit/tree/main
+# TODO: is this just using OPenAI and not including the document content?
 
 def main():
     st.header("Chat with PDF 💬")
