@@ -136,18 +136,18 @@ st.set_page_config(page_title="Translate Text", page_icon="🧠")
 st.title("🧠 Translate Text")
 
 st.markdown(
-    "[Azure Cognitive Services](https://azure.microsoft.com/en-gb/products/cognitive-services) "
+    "Azure Cognitive Services "
     "brings AI within reach of every developer and "
-     "data scientist. With leading models, a variety of use cases can be "
-     "unlocked. All it takes is an API call to embed the ability to see, "
-     "hear, speak, search, understand, and accelerate advanced "
-     "decision-making into your apps."
+    "data scientist. With leading models, a variety of use cases can be "
+    "unlocked. All it takes is an API call to embed the ability to see, "
+    "hear, speak, search, understand, and accelerate advanced "
+    "decision-making into your apps."
 )
 
 st.markdown(
     "In this example we use "
-    "[Translator](https://azure.microsoft.com/en-us/products/ai-services?activetab=pivot:translatortab)"
-     " to translate text from English to another selected language. "
+    "Translator "
+    "to translate text from English to another selected language. "
 )
 
 txt = st.text_area(

@@ -1,5 +1,6 @@
 # pylint: disable=invalid-name
 # pylint: disable=non-ascii-file-name
+# pylint: disable=pointless-string-statement
 """ Titanic survival model """
 
 import joblib
@@ -30,7 +31,8 @@ Women and children survived at rates of about 75 percent and
 """
 
 st.markdown(
-    "**:red[706]** people survived the disaster and **:red[1,517]** people died."
+    "**:red[706]** people survived the disaster and "
+    "**:red[1,517]** people died."
 )
 
 st.markdown(
@@ -55,19 +57,12 @@ st.markdown(
 def predict(data_frame):
     """Titanic model prediction"""
 
-# Example data:
-#    PassengerId  Survived  Pclass   Age  SibSp  Parch     Fare  Sex_female  Sex_male  Embarked_C  Embarked_Q  Embarked_S
-# 0            1       0.0       3  22.0      1      0   7.2500       False      True       False       False        True
-# 1            2       1.0       1  38.0      1      0  71.2833        True     False        True       False       False
-# 2            3       1.0       3  26.0      0      0   7.9250        True     False       False       False        True
-# 3            4       1.0       1  35.0      1      0  53.1000        True     False       False       False        True
-# 4            5       0.0       3  35.0      0      0   8.0500       False      True       False       False        True
-
     prediction = model.predict(data_frame)
     if prediction[0] == 1:
         st.success("Passenger Survived :thumbsup:")
     else:
         st.error("Passenger did not Survive :thumbsdown:")
+
 
 model = joblib.load('model.joblib')
 
@@ -95,7 +90,7 @@ embarked = st.selectbox(
     ["Southampton", "Cherbourg", "Queenstown"],
 )
 
-female, male  = sex_mapping.get(sex, [0, 0])
+female, male = sex_mapping.get(sex, [0, 0])
 southampton, cherbourg, queenstown = location_mapping.get(embarked, [0, 0, 0])
 
 data = pd.DataFrame({
@@ -116,4 +111,4 @@ data = pd.DataFrame({
 # st.markdown(data.head())
 
 if st.button("Predict"):
-    on_click=predict(data)
+    predict(data)

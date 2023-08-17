@@ -1,4 +1,5 @@
 # pylint: disable=invalid-name
+# pylint: disable=non-ascii-file-name
 """ Homepage Streamlit app """
 
 import math
