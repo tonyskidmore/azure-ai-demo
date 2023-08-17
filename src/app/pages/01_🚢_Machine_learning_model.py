@@ -64,7 +64,7 @@ def predict(data_frame):
         st.error("Passenger did not Survive :thumbsdown:")
 
 
-model = joblib.load('model.joblib')
+model = joblib.load("model.joblib")
 
 location_mapping = {
     "Southampton": [1, 0, 0],
@@ -93,19 +93,21 @@ embarked = st.selectbox(
 female, male = sex_mapping.get(sex, [0, 0])
 southampton, cherbourg, queenstown = location_mapping.get(embarked, [0, 0, 0])
 
-data = pd.DataFrame({
-    'PassengerId': [passenger_id],
-    'Pclass': [pclass],
-    'Age': [age],
-    'SibSp': [sibsp],
-    'Parch': [parch],
-    'Fare': [fare],
-    'Sex_female': [female],
-    'Sex_male': [male],
-    'Embarked_C': [cherbourg],
-    'Embarked_Q': [queenstown],
-    'Embarked_S': [southampton],
-})
+data = pd.DataFrame(
+    {
+        "PassengerId": [passenger_id],
+        "Pclass": [pclass],
+        "Age": [age],
+        "SibSp": [sibsp],
+        "Parch": [parch],
+        "Fare": [fare],
+        "Sex_female": [female],
+        "Sex_male": [male],
+        "Embarked_C": [cherbourg],
+        "Embarked_Q": [queenstown],
+        "Embarked_S": [southampton],
+    }
+)
 
 # debugging
 # st.markdown(data.head())

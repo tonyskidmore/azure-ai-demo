@@ -162,11 +162,11 @@ txt = st.text_area(
 # /language-support
 
 languages = {
-    'de': 'German',
-    'es': 'Spanish',
-    'fr': 'French',
-    'it': 'Italian',
-    'pl': 'Polish',
+    "de": "German",
+    "es": "Spanish",
+    "fr": "French",
+    "it": "Italian",
+    "pl": "Polish",
 }
 
 selected_value = st.selectbox("Language", languages.values())
