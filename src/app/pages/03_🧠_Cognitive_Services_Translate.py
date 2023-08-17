@@ -135,7 +135,21 @@ st.set_page_config(page_title="Translate Text", page_icon="🧠")
 
 st.title("🧠 Translate Text")
 
-st.markdown("Translate text using Azure Cognitive Services")
+st.markdown(
+    "Azure Cognitive Services "
+    "brings AI within reach of every developer and "
+    "data scientist. With leading models, a variety of use cases can be "
+    "unlocked. All it takes is an API call to embed the ability to see, "
+    "hear, speak, search, understand, and accelerate advanced "
+    "decision-making into your apps."
+)
+
+st.markdown(
+    "In this example we use "
+    "Translator "
+    "to translate text from English to another selected language. "
+)
+
 txt = st.text_area(
     "Text",
     "In order to perform a sequence of complicated calculations in a rapid"
@@ -146,8 +160,21 @@ txt = st.text_area(
 )
 # https://learn.microsoft.com/en-us/azure/cognitive-services/translator
 # /language-support
-lang = st.selectbox("Language", ["de", "es", "fr", "it", "pl"])
-dbg = st.checkbox("debug")
+
+languages = {
+    "de": "German",
+    "es": "Spanish",
+    "fr": "French",
+    "it": "Italian",
+    "pl": "Polish",
+}
+
+selected_value = st.selectbox("Language", languages.values())
+lang = [key for key, value in languages.items() if value == selected_value][0]
+
+# dbg = st.checkbox("debug")
+dbg = False
 translate = st.button("Translate")
 if translate:
+    # st.write(lang)
     translate_text(txt, lang, dbg)
